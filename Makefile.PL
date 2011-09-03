@@ -1,17 +1,22 @@
-use inc::Module::Install;
-use Module::Install::AuthorTests;
+use ExtUtils::MakeMaker;
 
-name 'Ukigumo-Client';
-all_from 'lib/Ukigumo/Client.pm';
-
-# requires '';
-# requires 'Exporter' => 5.63; # use Exporter 'import';
-# requires 'Plack' =>  0.9949;
-
-
-
-tests 't/*.t t/*/*.t t/*/*/*.t t/*/*/*/*.t';
-test_requires 'Test::More' => 0.96; # done_testing, subtest
-# test_requires 'Test::Requires';
-author_tests('xt');
-WriteAll;
+WriteMakefile(
+    NAME          => 'Ukigumo',
+    AUTHOR        => 'Tokuhiro Matsuno <tokuhirom+cpan@gmail.com>',
+    VERSION_FROM  => 'lib/Ukigumo/Client.pm',
+    PREREQ_PM     => {
+		'LWP::UserAgent' => 6,
+		'JSON' => 2,
+		'Mouse' => 0,
+		'File::HomeDir' => 0,
+		'String::IRC' => 0,
+		'Ukigumo::Common' => 0.01,
+		'Time::Piece' => 0,
+    },
+    MIN_PERL_VERSION => '5.010000',
+    (-d 'xt' and $ENV{AUTOMATED_TESTING} || $ENV{RELEASE_TESTING} || -d '.git') ? (
+        test => {
+            TESTS => 't/*.t xt/*.t',
+        },
+    ) : (),
+);
