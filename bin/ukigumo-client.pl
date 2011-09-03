@@ -43,7 +43,7 @@ my $app = Ukigumo::Client->new(
     server_url => $server_url,
     ($project ? (project    => $project) : ()),
 );
-$app->push_notifier( Ukigumo::Client::Notify::Debug->new());
+#$app->push_notifier( Ukigumo::Client::Notify::Debug->new());
 if ($ikachan_url) {
     pod2usage() if !$ikachan_channel;
     $app->push_notifier(
@@ -58,10 +58,14 @@ exit 0;
 
 __END__
 
+=head1 NAME
+
+ukigumo-client.pl - ukigumo client script
+
 =head1 SYNOPSIS
 
-    % ukigumo-client --repo=git://... --workdir /path/to/workdir/dir
-    % ukigumo-client --repo=git://... --workdir /path/to/workdir/dir --branch foo
+    % ukigumo-client --repo=git://...
+    % ukigumo-client --repo=git://... --branch foo
 
         --repo=s            URL for git repository
         --workdir=s         workdir directory for working(optional)
@@ -72,19 +76,14 @@ __END__
 
 =head1 DESCRIPTION
 
-超絶簡易的CIツール。 cron でよしなにぐるぐるまわして、fail したら mail とばす、で OK。
+This is a yet another continuous testing tools.
 
-    MAILTO=ci@example.com
-    */20 * * * * cronlog --timestamp -- ukigumo-client.pl --repo=git://github.com/ikebe/Pickles.git --branch switch_routes --base=/tmp/pickles-ci/
+=head1 EXAMPLE
 
-cronlog はこちらからインストールしてください: https://github.com/kazuho/kaztools
-
-=head1 実行例
-
-    perl bin/ukigumo-client.pl --server_url=http://localhost:9044/ --repo=git://github.com/tokuhirom/Acme-Failing.git
+    perl bin/ukigumo-client.pl --server_url=http://localhost:9044/ --repo=git://github.com/tokuhirom/Acme-Failing.git --branch=master
 
 =head1 SEE ALSO
 
-https://github.com/yappo/p5-App-Ikachan
+L<https://github.com/yappo/p5-App-Ikachan>
 
 =cut
