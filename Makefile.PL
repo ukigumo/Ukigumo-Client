@@ -1,7 +1,7 @@
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME          => 'Ukigumo',
+    NAME          => 'Ukigumo-Client',
     AUTHOR        => 'Tokuhiro Matsuno <tokuhirom+cpan@gmail.com>',
     VERSION_FROM  => 'lib/Ukigumo/Client.pm',
     PREREQ_PM     => {
