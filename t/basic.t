@@ -34,6 +34,7 @@ my $client = Ukigumo::Client->new(
             return STATUS_NA;
         }
     ),
+    quiet => 1,
 );
 $client->run();
 

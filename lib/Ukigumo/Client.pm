@@ -63,6 +63,12 @@ has 'user_agent' => (
     },
 );
 
+has quiet => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 0,
+);
+
 # components
 has 'vc' => (
     is       => 'ro',
@@ -163,7 +169,7 @@ sub log {
         Time::Piece->new()->strftime('[%Y-%m-%d %H:%M]'),
         '[' . $self->branch . ']', @_ )
       . "\n";
-	print STDOUT $msg;
+	print STDOUT $msg unless $self->quiet;
 	print {$self->logfh} $msg;
 }
 
