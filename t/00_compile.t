@@ -10,8 +10,6 @@ BEGIN {
 		Ukigumo::Client::Executor::Prove
 		Ukigumo::Client::Notify::Debug
 		Ukigumo::Client::Notify::Ikachan
-		Ukigumo::Client::Role::Executor
-		Ukigumo::Client::Role::Notify
 		Ukigumo::Client::Role::VC
 		Ukigumo::Client::VC::Callback
 		Ukigumo::Client::VC::Git
