@@ -6,26 +6,11 @@ package Ukigumo::Client::VC::Git;
 use Mouse;
 use Cwd;
 
-has 'repository' => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
-
-has 'branch' => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
+with 'Ukigumo::Client::Role::VC';
 
 sub get_revision {
 	my $self = shift;
 	$self->{revision} ||= ( substr( `git rev-parse HEAD`, 0, 10 ) || 'Unknown' );
-}
-
-sub description {
-    my $self = shift;
-    return join(' ', $self->repository, $self->branch);
 }
 
 sub update {
