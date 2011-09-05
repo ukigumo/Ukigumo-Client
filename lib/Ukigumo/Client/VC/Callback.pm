@@ -20,14 +20,25 @@ has 'update_cb' => (
     required => 1,
 );
 
+has 'get_log_cb' => (
+    is       => 'ro',
+    isa      => 'CodeRef',
+    default => sub { sub { '-' } },
+);
+
 sub get_revision {
 	my $self = shift;
 	$self->revision_cb->(@_);
 }
 
 sub update {
-    my ($self, $c) = @_;
+    my $self = shift;
 	$self->update_cb->(@_);
+}
+
+sub get_log {
+    my $self = shift;
+    $self->get_log_cb->(@_)
 }
 
 1;

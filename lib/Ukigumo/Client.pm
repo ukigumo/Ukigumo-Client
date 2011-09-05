@@ -101,12 +101,15 @@ sub run {
         chdir($self->workdir) or die "Cannot chdir(@{[ $self->workdir ]}): $!";
 
 		$self->log('run vc : ' . ref $self->vc);
+        my $orig_revision = $self->vc->get_revision();
         $self->vc->update($self, $self->workdir);
+        my $current_revision = $self->vc->get_revision();
+        my $vc_log = $self->vc->get_log($orig_revision, $current_revision);
 		$self->log('run executor : ' . ref $self->executor);
         my $status = $self->executor->run($self);
 		$self->log('finished testing : ' . $status);
 
-        my ($report_url, $last_status) = $self->send_to_server($status);
+        my ($report_url, $last_status) = $self->send_to_server($status, $current_revision, $vc_log);
 
         $self->log("sending notification: @{[ $self->branch ]}, $status");
         for my $notify (@{$self->notifiers}) {
@@ -118,7 +121,7 @@ sub run {
 }
 
 sub send_to_server {
-    my ($self, $status) = @_;
+    my ($self, $status, $current_revision, $vc_log) = @_;
 
 	my $ua = $self->user_agent();
 
@@ -129,8 +132,9 @@ sub send_to_server {
 			project  => $self->project,
 			branch   => $self->branch,
 			repo     => $self->repository,
-			revision => $self->vc->get_revision,
+			revision => $current_revision,
 			status   => $status,
+            vc_log   => $vc_log,
 			body     => [$self->logfh->filename],
 		];
 	my $res = $ua->request($req);
