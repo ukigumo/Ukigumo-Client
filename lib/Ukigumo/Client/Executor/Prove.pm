@@ -12,4 +12,13 @@ sub run {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Ukigumo::Client::Executor::Prove - runs prove command
+
+=head1 DESCRIPTION
+
+This executor runs prove command.
 

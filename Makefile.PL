@@ -19,4 +19,5 @@ WriteMakefile(
             TESTS => 't/*.t xt/*.t',
         },
     ) : (),
+	EXE_FILES => [ 'bin/ukigumo-client.pl' ]
 );

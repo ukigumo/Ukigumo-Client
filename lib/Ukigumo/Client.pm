@@ -53,6 +53,15 @@ has 'server_url' => (
     isa      => 'Str',
     required => 1,
 );
+has 'user_agent' => (
+    is       => 'ro',
+    required => 1,
+    lazy     => 1,
+    default  => sub {
+        LWP::UserAgent->new(
+            agent => "ukigumo-client/$Ukigumo::Client::VERSION" );
+    },
+);
 
 # components
 has 'vc' => (
@@ -105,7 +114,7 @@ sub run {
 sub send_to_server {
     my ($self, $status) = @_;
 
-	my $ua = $self->get_user_agent();
+	my $ua = $self->user_agent();
 
 	my $req = 
 		POST $self->server_url . '/api/v1/report/add',
@@ -126,13 +135,6 @@ sub send_to_server {
     return ($report_url, $dat->{report}->{last_status});
 }
 
-sub get_user_agent {
-    my $self = shift;
-
-    return $self->{user_agent} ||=
-      LWP::UserAgent->new(
-        agent => "ukigumo-client/$Ukigumo::Client::VERSION" );
-}
 
 sub tee {
 	my ($self, $command) = @_;
@@ -153,16 +155,6 @@ sub tee {
         exec( $command );
         die "can't exec $command $!";
     }
-}
-
-sub file {
-    my $self = shift;
-    File::Spec->catfile($self->workdir, @_);
-}
-
-sub dir {
-    my $self = shift;
-    File::Spec->catdir($self->workdir, @_);
 }
 
 sub log {
@@ -214,13 +206,81 @@ Ukigumo::Client - Client library for Ukigumo
 
 Ukigumo::Client is client library for Ukigumo.
 
+=head1 ATTRIBUTES
+
+=item workdir
+
+Working directory for the code. It's $ENV{HOME}/.ukigumo/work/$project/$branch by default.
+
+=item project
+
+Its' project name. This is a mandatory parameter.
+
+=item logfh
+
+Log file handle. It's read only parameter.
+
+=item server_url
+
+URL of the Ukigumo server. It's required.
+
+=item user_agent
+
+instance of L<LWP::UserAgent>. It's have a default value.
+
+=item vc
+
+This is a version contaroller object. It's normally Ukigumo::Client::VC::*. But you can write your own class.
+
+VC::* objects should have a following methods:
+
+    get_revision branch repository
+
+=item executor
+
+This is a test executor object. It's normally Ukigumo::Client::Executor::*. But you can write your own class.
+
+=item notifiers
+
+This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::*. But you can write your own class.
+
+=back
+
+=head1 METHODS
+
+=over 4
+
+=item $client->push_notifier($notifier : Ukigumo::Client::Notify)
+
+push a notifier object to $client->notifiers.
+
+=item $client->run()
+
+Run a test context.
+
+=item $client->send_to_server($status: Int)
+
+Send a notification to the sever.
+
+=item $client->tee($command: Str)
+
+This method runs C<< $command >> and tee the output of the STDOUT/STDERR to the logfh.
+
+I<Return>: exit code by the C<< $command >>.
+
+=item $client->log($message)
+
+Print C<< $message >> and write to the logfh.
+
+=back
+
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF GMAIL COME<gt>
 
 =head1 SEE ALSO
 
-L<Ukigumo::Server>
+L<Ukigumo::Server>, L<Ukigumo:https://github.com/ukigumo/>
 
 =head1 LICENSE
 

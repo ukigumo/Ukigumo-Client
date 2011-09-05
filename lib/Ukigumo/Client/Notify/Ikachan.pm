@@ -44,7 +44,7 @@ sub send {
         return;
     }
 
-    my $ua = $c->get_user_agent();
+    my $ua = $c->user_agent();
 
     my $url = $self->url;
     $url =~ s!/$!!;    # remove trailing slash
@@ -77,4 +77,40 @@ sub _status_color_message {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Ukigumo::Client::Notify::Ikachan - send notification to ikachan.
+
+=head1 DESCRIPTION
+
+This is a notifier class for Ukigumo, send notification to ikachan server.
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item url
+
+URL of the ikachan server.
+
+=item channel
+
+Channel name to send a message.
+
+=item ignore_success
+
+Ignore the message if it's succeeded.
+
+=item method
+
+Sending method. It's B</notice> by default.
+
+=back
+
+=head1 SEE ALSO
+
+L<App::Ikachan>
+
 

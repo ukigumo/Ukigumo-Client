@@ -43,4 +43,26 @@ sub update {
 }
 
 1;
+__END__
 
+=head1 NAME
+
+Ukigumo::Client::VC::Git - git.
+
+=head1 DESCRIPTION
+
+This is a git wrapper for Ukigumo.
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item repository
+
+This is a repository URL.
+
+=item branch
+
+This is a name of branch. It's B<master> by default.
+
+=back

@@ -25,3 +25,12 @@ sub run {
 
 1;
 
+__END__
+
+=head1 NAME
+
+Ukigumo::Client::Executor::Perl - Test executor for project written by perl.
+
+=head1 DESCRIPTION
+
+This executor runs 'perl Makefile.PL && make test' or 'perl Build.PL && ./Build test'.
