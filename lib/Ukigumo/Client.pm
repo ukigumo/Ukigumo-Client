@@ -208,6 +208,8 @@ Ukigumo::Client is client library for Ukigumo.
 
 =head1 ATTRIBUTES
 
+=over 4
+
 =item workdir
 
 Working directory for the code. It's $ENV{HOME}/.ukigumo/work/$project/$branch by default.
@@ -230,7 +232,7 @@ instance of L<LWP::UserAgent>. It's have a default value.
 
 =item vc
 
-This is a version contaroller object. It's normally Ukigumo::Client::VC::*. But you can write your own class.
+This is a version controller object. It's normally Ukigumo::Client::VC::*. But you can write your own class.
 
 VC::* objects should have a following methods:
 

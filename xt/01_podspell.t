@@ -34,3 +34,9 @@ API
 URL
 URI
 db
+Str
+logfh
+vc
+workdir
+ikachan
+url
