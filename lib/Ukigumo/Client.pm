@@ -125,6 +125,9 @@ sub send_to_server {
 
 	my $ua = $self->user_agent();
 
+    # flush log file before send it
+    $self->logfh->flush();
+
 	my $req = 
 		POST $self->server_url . '/api/v1/report/add',
 		Content_Type => 'form-data',
