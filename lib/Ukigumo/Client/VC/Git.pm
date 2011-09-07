@@ -6,26 +6,13 @@ package Ukigumo::Client::VC::Git;
 use Mouse;
 use Cwd;
 
-has 'repository' => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
+with 'Ukigumo::Client::Role::VC';
 
-has 'branch' => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
+has log_limit => ( is => 'ro', isa => 'Int', default => 50 );
 
 sub get_revision {
 	my $self = shift;
 	$self->{revision} ||= ( substr( `git rev-parse HEAD`, 0, 10 ) || 'Unknown' );
-}
-
-sub description {
-    my $self = shift;
-    return join(' ', $self->repository, $self->branch);
 }
 
 sub update {
@@ -40,6 +27,12 @@ sub update {
     $c->tee("git submodule update 2>&1")==0 or die "git fail";
     $c->tee("git clean -dxf 2>&1")==0 or die "git fail";
     $c->tee("git status 2>&1")==0 or die "git fail";
+}
+
+sub get_log {
+    my ($self, $rev1, $rev2) = @_;
+    # -50 means limit.
+    `git log --pretty=format:"%h %an: %s" --abbrev-commit --source -@{[ $self->log_limit ]} '$rev1..$rev2'`
 }
 
 1;
