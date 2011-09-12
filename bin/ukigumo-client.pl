@@ -82,6 +82,10 @@ This is a yet another continuous testing tools.
 
     perl bin/ukigumo-client.pl --server_url=http://localhost:9044/ --repo=git://github.com/tokuhirom/Acme-Failing.git --branch=master
 
+Or use online demo.
+
+    perl bin/ukigumo-client.pl --server_url=http://ukigumo-4z7a3pfx.dotcloud.com/ --repo=git://github.com/tokuhirom/Acme-Failing.git
+
 =head1 SEE ALSO
 
 L<https://github.com/yappo/p5-App-Ikachan>
