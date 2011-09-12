@@ -3,6 +3,7 @@ use warnings;
 use utf8;
 
 package Ukigumo::Client::Executor::Perl;
+use Config;
 use Mouse;
 use Ukigumo::Constants;
 
@@ -11,7 +12,7 @@ sub run {
 
     if (-f 'Makefile.PL') {
         $c->tee("perl Makefile.PL 2>&1")==0 or return STATUS_FAIL;
-        $c->tee("make test 2>&1")==0 or return STATUS_FAIL;
+        $c->tee("$Config{make} test 2>&1")==0 or return STATUS_FAIL;
         return STATUS_SUCCESS;
     } elsif (-f 'Build.PL') {
         $c->tee("perl Build.PL 2>&1")==0 or return STATUS_FAIL;
