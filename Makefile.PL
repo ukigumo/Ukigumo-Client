@@ -11,7 +11,7 @@ WriteMakefile(
 		'File::HomeDir' => 0,
 		'String::IRC' => 0,
 		'Ukigumo::Common' => 0.01,
-		'Time::Piece' => 0,
+		'Time::Piece' => '1.15',
 		'Capture::Tiny' => 0,
 		'Encode::Locale' => 0,
     },
