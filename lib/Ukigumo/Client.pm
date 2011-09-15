@@ -5,6 +5,9 @@ use 5.008001;
 our $VERSION = '0.01';
 
 use Carp ();
+use Capture::Tiny;
+use Encode::Locale;
+use Encode;
 use File::Spec;
 use File::Path qw(mkpath);
 use LWP::UserAgent;
@@ -152,24 +155,17 @@ sub send_to_server {
 
 
 sub tee {
-	my ($self, $command) = @_;
+    my ($self, $command) = @_;
     $self->log("command: $command");
-	my $pid = open(my $fh, '-|');
-	local $SIG{PIPE} = sub { die "whoops, $command pipe broke" };
-
-    if ($pid) {    # parent
-        while (<$fh>) {
-            print $_;
-			print {$self->logfh} $_;
-        }
-        close($fh) || warn "kid exited $?";
-		return $?;
-    }
-    else {         # child
+    my ($out) = Capture::Tiny::capture {
         ( $EUID, $EGID ) = ( $UID, $GID );
-        exec( $command );
-        die "can't exec $command $!";
-    }
+        system $command
+    };
+    Encode::decode("console_out", $out);
+
+    print $out;
+    print {$self->logfh} $out;
+    return $?;
 }
 
 sub log {
