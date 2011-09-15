@@ -12,6 +12,8 @@ WriteMakefile(
 		'String::IRC' => 0,
 		'Ukigumo::Common' => 0.01,
 		'Time::Piece' => 0,
+		'Capture::Tiny' => 0,
+		'Encode::Locale' => 0,
     },
     MIN_PERL_VERSION => '5.010000',
     (-d 'xt' and $ENV{AUTOMATED_TESTING} || $ENV{RELEASE_TESTING} || -d '.git') ? (

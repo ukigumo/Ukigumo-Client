@@ -11,12 +11,12 @@ sub run {
     my ($self, $c) = @_;
 
     if (-f 'Makefile.PL') {
-        $c->tee("perl Makefile.PL 2>&1")==0 or return STATUS_FAIL;
-        $c->tee("$Config{make} test 2>&1")==0 or return STATUS_FAIL;
+        $c->tee("perl Makefile.PL")==0 or return STATUS_FAIL;
+        $c->tee("$Config{make} test")==0 or return STATUS_FAIL;
         return STATUS_SUCCESS;
     } elsif (-f 'Build.PL') {
-        $c->tee("perl Build.PL 2>&1")==0 or return STATUS_FAIL;
-        $c->tee("./Build test 2>&1")==0 or return STATUS_FAIL;
+        $c->tee("perl Build.PL")==0 or return STATUS_FAIL;
+        $c->tee("./Build test")==0 or return STATUS_FAIL;
         return STATUS_SUCCESS;
     } else {
         $c->log("There is no Makefile.PL or Build.PL");

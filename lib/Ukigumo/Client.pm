@@ -157,7 +157,7 @@ sub send_to_server {
 sub tee {
     my ($self, $command) = @_;
     $self->log("command: $command");
-    my ($out) = Capture::Tiny::capture {
+    my ($out) = Capture::Tiny::capture_merged {
         ( $EUID, $EGID ) = ( $UID, $GID );
         system $command
     };

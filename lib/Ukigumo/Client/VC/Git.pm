@@ -20,13 +20,13 @@ sub update {
 
     $c->log("workdir is " . Cwd::getcwd());
     unless (-d ".git") {
-        $c->tee("git clone --branch $self->{branch} @{[ $self->repository ]} ./ 2>&1") == 0 or die "Cannot clone repository";
+        $c->tee("git clone --branch $self->{branch} @{[ $self->repository ]} ./") == 0 or die "Cannot clone repository";
     }
-    $c->tee("git pull -f origin $self->{branch} 2>&1")==0 or die "git fail";
-    $c->tee("git submodule init 2>&1")==0 or die "git fail";
-    $c->tee("git submodule update 2>&1")==0 or die "git fail";
-    $c->tee("git clean -dxf 2>&1")==0 or die "git fail";
-    $c->tee("git status 2>&1")==0 or die "git fail";
+    $c->tee("git pull -f origin $self->{branch}")==0 or die "git fail";
+    $c->tee("git submodule init")==0 or die "git fail";
+    $c->tee("git submodule update")==0 or die "git fail";
+    $c->tee("git clean -dxf")==0 or die "git fail";
+    $c->tee("git status")==0 or die "git fail";
 }
 
 sub get_log {
