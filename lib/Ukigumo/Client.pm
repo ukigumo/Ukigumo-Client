@@ -58,8 +58,10 @@ has 'user_agent' => (
     required => 1,
     lazy     => 1,
     default  => sub {
-        LWP::UserAgent->new(
+        my $ua = LWP::UserAgent->new(
             agent => "ukigumo-client/$Ukigumo::Client::VERSION" );
+        $ua->env_proxy;
+        $ua;
     },
 );
 
