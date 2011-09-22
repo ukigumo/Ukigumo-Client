@@ -30,8 +30,7 @@ has 'workdir' => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        File::Spec->catdir( File::HomeDir->my_home, '.ukigumo', 'work',
-            $self->project, $self->branch );
+        File::Spec->catdir( File::HomeDir->my_home, '.ukigumo', 'work')
     },
 );
 has 'project' => (
@@ -97,17 +96,19 @@ sub push_notifier {
 sub run {
     my $self = shift;
 
+    my $workdir = File::Spec->catdir( $self->workdir, $self->project, $self->branch );
+
     $self->log("ukigumo-client $VERSION");
     $self->log("start testing : " . $self->vc->description());
-    $self->log("working directory : " . $self->workdir);
+    $self->log("working directory : " . $workdir);
 
     {
-        mkpath($self->workdir);
-        chdir($self->workdir) or die "Cannot chdir(@{[ $self->workdir ]}): $!";
+        mkpath($workdir);
+        chdir($workdir) or die "Cannot chdir(@{[ $workdir ]}): $!";
 
 		$self->log('run vc : ' . ref $self->vc);
         my $orig_revision = $self->vc->get_revision();
-        $self->vc->update($self, $self->workdir);
+        $self->vc->update($self, $workdir);
         my $current_revision = $self->vc->get_revision();
         my $vc_log = $self->vc->get_log($orig_revision, $current_revision);
 		$self->log('run executor : ' . ref $self->executor);
