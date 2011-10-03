@@ -64,8 +64,8 @@ ukigumo-client.pl - ukigumo client script
 
 =head1 SYNOPSIS
 
-    % ukigumo-client --repo=git://...
-    % ukigumo-client --repo=git://... --branch foo
+    % ukigumo-client.pl --repo=git://...
+    % ukigumo-client.pl --repo=git://... --branch foo
 
         --repo=s            URL for git repository
         --workdir=s         workdir directory for working(optional)
