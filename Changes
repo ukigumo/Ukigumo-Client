@@ -1,5 +1,10 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.03
+
+    - better error message on ukigumo-client.pl
+    - doc fix
+
 0.02
 
     - win32 fix(mattn++)
