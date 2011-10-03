@@ -1,4 +1,10 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.02
+
+    - win32 fix(mattn++)
+    - added Executor::Callback
+    - added VC::Callback
+
 0.01    Sat Sep  3 19:14:47 2011
         - original version
