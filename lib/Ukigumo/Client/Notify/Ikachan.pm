@@ -24,7 +24,7 @@ has 'ignore_success' => (
     is => 'ro',
     isa => 'Bool',
     required => 0,
-    default => 0,
+    default => 1,
 );
 
 has 'method' => (
