@@ -18,6 +18,7 @@ use HTTP::Request::Common qw(POST);
 use JSON qw(decode_json);
 use File::Temp;
 use File::HomeDir;
+use URI::Escape qw(uri_escape);
 
 use Ukigumo::Constants;
 
@@ -96,7 +97,7 @@ sub push_notifier {
 sub run {
     my $self = shift;
 
-    my $workdir = File::Spec->catdir( $self->workdir, $self->project, $self->branch );
+    my $workdir = File::Spec->catdir( $self->workdir, uri_escape($self->project), uri_escape($self->branch) );
 
     $self->log("ukigumo-client $VERSION");
     $self->log("start testing : " . $self->vc->description());
