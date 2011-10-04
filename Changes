@@ -1,5 +1,9 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.05
+
+    - [Notify::Ikachan] make ignore_success option as '1' by default.
+
 0.04
 
     - allow '/' character in branch name
