@@ -1,5 +1,9 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.04
+
+    - allow '/' character in branch name
+
 0.03
 
     - better error message on ukigumo-client.pl
