@@ -291,7 +291,7 @@ Print C<< $message >> and write to the logfh.
 
 =head1 AUTHOR
 
-Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF GMAIL COME<gt>
+Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
 
 =head1 SEE ALSO
 

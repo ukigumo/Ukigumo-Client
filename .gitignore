@@ -12,3 +12,9 @@ tags
 blib/
 pm_to_blib
 MANIFEST
+META.yml
+MYMETA.*
+META.json
+META.yml
+README
+Ukigumo-Client-*/

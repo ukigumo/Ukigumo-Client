@@ -27,3 +27,11 @@ perltidy.ERR$
 ^tags$
 ^Ukigumo-\d
 ^README.mkdn$
+^README.pod$
+^MYMETA\.
+\b_build
+\binc/
+^MANIFEST\.SKIP
+\b\.gitignore
+\.bak$
+^Ukigumo-Client-

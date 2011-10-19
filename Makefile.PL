@@ -4,6 +4,8 @@ WriteMakefile(
     NAME          => 'Ukigumo-Client',
     AUTHOR        => 'Tokuhiro Matsuno <tokuhirom+cpan@gmail.com>',
     VERSION_FROM  => 'lib/Ukigumo/Client.pm',
+    ABSTRACT_FROM  => 'lib/Ukigumo/Client.pm',
+	LICENSE => 'perl',
     PREREQ_PM     => {
 		'LWP::UserAgent' => 6,
 		'JSON' => 2,
