@@ -20,7 +20,7 @@ WriteMakefile(
 		'Test::Requires' => 0,
     },
     MIN_PERL_VERSION => '5.010000',
-    (-d 'xt' and $ENV{AUTOMATED_TESTING} || $ENV{RELEASE_TESTING} || -d '.git') ? (
+    (-d 'xt' and ($ENV{RELEASE_TESTING} || -d '.git')) ? (
         test => {
             TESTS => 't/*.t xt/*.t',
         },
