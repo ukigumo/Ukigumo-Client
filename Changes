@@ -1,5 +1,9 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.08
+
+    - fixed packaging issue
+
 0.07
 
     - better packaging
