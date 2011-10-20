@@ -163,7 +163,7 @@ sub tee {
         ( $EUID, $EGID ) = ( $UID, $GID );
         system $command
     };
-    $out = Encode::decode("console_out", $out);
+    $out = Encode::encode("console_in", Encode::decode("console_out", $out));
 
     print {$self->logfh} $out;
     return $?;
