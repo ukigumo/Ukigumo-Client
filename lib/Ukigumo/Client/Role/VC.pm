@@ -31,6 +31,7 @@ requires qw(
 	get_revision
 	update
     get_log
+    default_branch
 );
 
 1;

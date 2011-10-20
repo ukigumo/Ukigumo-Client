@@ -10,6 +10,8 @@ with 'Ukigumo::Client::Role::VC';
 
 has log_limit => ( is => 'ro', isa => 'Int', default => 50 );
 
+sub default_branch { 'trunk' }
+
 sub get_revision {
     my $self = shift;
     $self->{revision} ||= $self->_revision() || 'Unknown';

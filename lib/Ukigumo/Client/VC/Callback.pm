@@ -26,6 +26,17 @@ has 'get_log_cb' => (
     default => sub { sub { '-' } },
 );
 
+has 'default_branch_cb' => (
+    is       => 'ro',
+    isa      => 'CodeRef',
+    default  => sub { sub { 'master' } },
+);
+
+sub default_branch {
+    my $self = shift;
+    $self->default_branch_cb(@_);
+};
+
 sub get_revision {
 	my $self = shift;
 	$self->revision_cb->(@_);

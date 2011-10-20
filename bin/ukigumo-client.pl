@@ -13,7 +13,6 @@ use Getopt::Long;
 use Pod::Usage;
 
 use Ukigumo::Client;
-use Ukigumo::Client::VC::Git;
 use Ukigumo::Client::Executor::Auto;
 use Ukigumo::Client::Notify::Debug;
 use Ukigumo::Client::Notify::Ikachan;
@@ -26,22 +25,29 @@ GetOptions(
     'ikachan_channel=s' => \my $ikachan_channel,
     'server_url=s'      => \my $server_url,
     'project=s'         => \my $project,
+    'vc=s'              => \my $vc,
 );
+
 $repo       or do { warn "Missing mandatory option: --repo\n\n"; pod2usage() };
 $server_url or do { warn "Missing mandatory option: --server_url\n\n"; pod2usage() };
-$branch='master' unless $branch;
+
+$vc = 'Git' unless $vc;
+my $vc_module = "Ukigumo::Client::VC::$vc";
+eval "require $vc_module; 1" or die $@;
+
+$branch = $vc_module->default_branch unless $branch;
 die "Bad branch name: $branch" unless $branch =~ m{^[A-Za-z0-9./_-]+$}; # guard from web
 $server_url =~ s!/$!! if defined $server_url;
 
 my $app = Ukigumo::Client->new(
     (defined($workdir) ? (workdir => $workdir) : ()),
-    vc   => Ukigumo::Client::VC::Git->new(
+    vc => $vc_module->new(
         branch     => $branch,
         repository => $repo,
     ),
     executor   => Ukigumo::Client::Executor::Perl->new(),
     server_url => $server_url,
-    ($project ? (project    => $project) : ()),
+    ($project ? (project => $project) : ()),
 );
 #$app->push_notifier( Ukigumo::Client::Notify::Debug->new());
 if ($ikachan_url) {
@@ -67,12 +73,13 @@ ukigumo-client.pl - ukigumo client script
 
 =head1 SYNOPSIS
 
-    % ukigumo-client.pl --repo=git://...
-    % ukigumo-client.pl --repo=git://... --branch foo
+    % ukigumo-client.pl --repo=git://... --server_url=http://...
+    % ukigumo-client.pl --repo=git://... --server_url=http://... --branch foo
 
-        --repo=s            URL for git repository
+        --repo=s            URL for repository
+        --vc                version controll system('Git' by default)
         --workdir=s         workdir directory for working(optional)
-        --branch=s          branch name('master' by default)
+        --branch=s          branch name(VC::{vc}->default_branch by default)
         --server_url=s      Ukigumo server url(using app.psgi)
         --ikachan_url=s     API endpoint URL for ikachan
         --ikachan_channel=s channel to post message
