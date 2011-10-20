@@ -159,13 +159,12 @@ sub send_to_server {
 sub tee {
     my ($self, $command) = @_;
     $self->log("command: $command");
-    my ($out) = Capture::Tiny::capture_merged {
+    my ($out) = Capture::Tiny::tee_merged {
         ( $EUID, $EGID ) = ( $UID, $GID );
         system $command
     };
-    Encode::decode("console_out", $out);
+    $out = Encode::decode("console_out", $out);
 
-    print $out;
     print {$self->logfh} $out;
     return $?;
 }
