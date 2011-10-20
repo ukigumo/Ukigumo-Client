@@ -27,6 +27,7 @@ sub update {
     $c->tee("git submodule update")==0 or die "git fail";
     $c->tee("git clean -dxf")==0 or die "git fail";
     $c->tee("git status")==0 or die "git fail";
+    delete $self->{revision};
 }
 
 sub get_log {
