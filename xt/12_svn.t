@@ -4,6 +4,8 @@ use utf8;
 use Test::More;
 use Test::Requires 'LWP::Protocol::PSGI';
 
+plan skip_all => 'There is no svn' if system('svn --version')!=0;
+
 use Ukigumo::Client;
 use Ukigumo::Client::VC::SVN;
 use Ukigumo::Client::Executor::Perl;
