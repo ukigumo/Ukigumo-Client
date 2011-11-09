@@ -40,3 +40,4 @@ vc
 workdir
 ikachan
 url
+svn
