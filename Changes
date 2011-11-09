@@ -1,5 +1,12 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.09
+
+    - VC::SVN(xaicron)
+    * d6c85db reset revision after update
+    * e9c930f maybe better for tee_merged
+    * 4852ef8 forgotten substituting
+
 0.08
 
     - fixed packaging issue
