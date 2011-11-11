@@ -1,5 +1,11 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.11
+
+    * 8a6f9d8 better diag on http response error
+    * b9febd1 Notify::Ikachan: ignore STATUS_SKIP by default.
+    * depend to Ukigumo::Common 0.03
+
 0.10
 
     - no feature changes
