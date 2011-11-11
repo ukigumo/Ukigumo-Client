@@ -12,7 +12,7 @@ WriteMakefile(
 		'Mouse' => 0,
 		'File::HomeDir' => 0,
 		'String::IRC' => 0,
-		'Ukigumo::Common' => 0.01,
+		'Ukigumo::Common' => 0.02,
 		'Time::Piece' => '1.15',
 		'Capture::Tiny' => 0,
 		'Encode::Locale' => 0,
