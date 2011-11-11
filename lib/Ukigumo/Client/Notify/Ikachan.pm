@@ -27,6 +27,12 @@ has 'ignore_success' => (
     default => 1,
 );
 
+has ignore_skip => (
+    is => 'ro',
+    isa => 'Bool',
+    default => 1,
+);
+
 has 'method' => (
     is      => 'ro',
     isa     => 'Str',
@@ -41,6 +47,10 @@ sub send {
     if ( $self->ignore_success && $status eq STATUS_SUCCESS && defined($last_status) && $status eq $last_status ) {
         $c->log(
             "The test was succeeded. There is no reason to notify($status, $last_status).");
+        return;
+    }
+    if ( $self->ignore_skip && $status eq STATUS_SKIP ) {
+        $c->log( "The test was skiped. There is no reason to notify.");
         return;
     }
 
