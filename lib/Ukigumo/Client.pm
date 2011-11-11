@@ -148,7 +148,7 @@ sub send_to_server {
 			body     => [$self->logfh->filename],
 		];
 	my $res = $ua->request($req);
-	$res->is_success or die $res->as_string;
+	$res->is_success or die "Cannot send a report to @{[ $self->server_url ]}/api/v1/report/add:\n" . $res->as_string;
 	my $dat = eval { decode_json($res->decoded_content) } || $res->decoded_content . " : $@";
 	$self->log("report url: $dat->{report}->{url}");
 	my $report_url = $dat->{report}->{url} or die "Cannot get report url";
