@@ -44,7 +44,7 @@ no Mouse;
 sub send {
     my ($self, $c, $status, $last_status, $report_url) = @_;
 
-    if ( $self->ignore_success && $status eq STATUS_SUCCESS && defined($last_status) && $status eq $last_status ) {
+    if ( $self->ignore_success && $status eq STATUS_SUCCESS && defined($last_status) && ($last_status eq STATUS_SUCCESS || $last_status eq STATUS_SKIP) ) {
         $c->log(
             "The test was succeeded. There is no reason to notify($status, $last_status).");
         return;
