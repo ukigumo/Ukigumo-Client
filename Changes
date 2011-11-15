@@ -1,5 +1,9 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.12
+
+    - skip notification if $status is success and last status was skipped.
+
 0.11
 
     * 8a6f9d8 better diag on http response error
