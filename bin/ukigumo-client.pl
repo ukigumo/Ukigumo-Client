@@ -14,6 +14,7 @@ use Pod::Usage;
 
 use Ukigumo::Client;
 use Ukigumo::Client::Executor::Auto;
+use Ukigumo::Client::Executor::Command;
 use Ukigumo::Client::Notify::Debug;
 use Ukigumo::Client::Notify::Ikachan;
 
@@ -26,6 +27,7 @@ GetOptions(
     'server_url=s'      => \my $server_url,
     'project=s'         => \my $project,
     'vc=s'              => \my $vc,
+    'command=s'         => \my $command,
 );
 
 $repo       or do { warn "Missing mandatory option: --repo\n\n"; pod2usage() };
@@ -45,7 +47,10 @@ my $app = Ukigumo::Client->new(
         branch     => $branch,
         repository => $repo,
     ),
-    executor   => Ukigumo::Client::Executor::Perl->new(),
+    executor   => ($command ?
+        Ukigumo::Client::Executor::Command->new(command => $command) :
+        Ukigumo::Client::Executor::Perl->new()
+    ),
     server_url => $server_url,
     ($project ? (project => $project) : ()),
 );
