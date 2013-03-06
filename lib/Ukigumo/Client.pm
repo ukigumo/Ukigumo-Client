@@ -111,6 +111,11 @@ sub run {
         my $orig_revision = $self->vc->get_revision();
         $self->vc->update($self, $workdir);
         my $current_revision = $self->vc->get_revision();
+
+        if ($self->vc->skip_if_unmodified && $orig_revision eq $current_revision) {
+            $self->log('skip testing');
+            return;
+        }
         my $vc_log = $self->vc->get_log($orig_revision, $current_revision);
 		$self->log('run executor : ' . ref $self->executor);
         my $status = $self->executor->run($self);
