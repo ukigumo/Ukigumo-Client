@@ -19,15 +19,16 @@ use Ukigumo::Client::Notify::Debug;
 use Ukigumo::Client::Notify::Ikachan;
 
 GetOptions(
-    'branch=s'          => \my $branch,
-    'workdir=s'         => \my $workdir,
-    'repo=s'            => \my $repo,
-    'ikachan_url=s'     => \my $ikachan_url,
-    'ikachan_channel=s' => \my $ikachan_channel,
-    'server_url=s'      => \my $server_url,
-    'project=s'         => \my $project,
-    'vc=s'              => \my $vc,
-    'command=s'         => \my $command,
+    'branch=s'           => \my $branch,
+    'workdir=s'          => \my $workdir,
+    'repo=s'             => \my $repo,
+    'ikachan_url=s'      => \my $ikachan_url,
+    'ikachan_channel=s'  => \my $ikachan_channel,
+    'server_url|s=s'     => \my $server_url,
+    'project=s'          => \my $project,
+    'vc=s'               => \my $vc,
+    'command=s'          => \my $command,
+    'skip_if_unmodified' => \my $skip_if_unmodified,
 );
 
 $repo       or do { warn "Missing mandatory option: --repo\n\n"; pod2usage() };
@@ -46,6 +47,7 @@ my $app = Ukigumo::Client->new(
     vc => $vc_module->new(
         branch     => $branch,
         repository => $repo,
+        ($skip_if_unmodified ? (skip_if_unmodified => $skip_if_unmodified) : ()),
     ),
     executor   => ($command ?
         Ukigumo::Client::Executor::Command->new(command => $command) :
@@ -81,13 +83,14 @@ ukigumo-client.pl - ukigumo client script
     % ukigumo-client.pl --repo=git://... --server_url=http://...
     % ukigumo-client.pl --repo=git://... --server_url=http://... --branch foo
 
-        --repo=s            URL for repository
-        --vc                version controll system('Git' by default)
-        --workdir=s         workdir directory for working(optional)
-        --branch=s          branch name(VC::{vc}->default_branch by default)
-        --server_url=s      Ukigumo server url(using app.psgi)
-        --ikachan_url=s     API endpoint URL for ikachan
-        --ikachan_channel=s channel to post message
+        --repo=s             URL for repository
+        --vc                 version controll system('Git' by default)
+        --workdir=s          workdir directory for working(optional)
+        --branch=s           branch name(VC::{vc}->default_branch by default)
+        --server_url=s       Ukigumo server url(using app.psgi)
+        --ikachan_url=s      API endpoint URL for ikachan
+        --ikachan_channel=s  channel to post message
+        --skip_if_unmodified skip testing if repository is unmodified
 
 =head1 DESCRIPTION
 
