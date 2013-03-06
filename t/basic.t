@@ -7,16 +7,18 @@ use Test::Requires 'LWP::Protocol::PSGI';
 use Ukigumo::Client;
 use Ukigumo::Client::VC::Callback;
 use Ukigumo::Client::Executor::Callback;
+use Ukigumo::Client::Notify::Callback;
 use Ukigumo::Constants;
 use JSON;
 
+my $REPORT_URL = 'http://...';
 LWP::Protocol::PSGI->register(sub{
 	ok 1;
 
 	[200, ['Content-Type' => 'text/json'], [
 		encode_json(+{
 			report => {
-				url => 'http://...',
+				url => $REPORT_URL,
 			},
 		})
 	]];
@@ -36,7 +38,18 @@ my $client = Ukigumo::Client->new(
     ),
     quiet => 1,
 );
+
+$client->push_notifier(
+    Ukigumo::Client::Notify::Callback->new(
+        send_cb => sub {
+            my ($c, $status, $last_status, $report_url) = @_;
+            is $status,     STATUS_NA;
+            ok !$last_status;
+            is $report_url, $REPORT_URL;
+        }
+    ),
+);
+
 $client->run();
 
 done_testing;
-
