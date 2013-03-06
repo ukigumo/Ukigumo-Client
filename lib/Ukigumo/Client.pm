@@ -197,27 +197,27 @@ Ukigumo::Client - Client library for Ukigumo
 =head1 SYNOPSIS
 
     use Ukigumo::Client;
-	use Ukigumo::Client::VC::Git;
-	use Ukigumo::Client::Executor::Auto;
-	use Ukigumo::Client::Notify::Debug;
-	use Ukigumo::Client::Notify::Ikachan;
+    use Ukigumo::Client::VC::Git;
+    use Ukigumo::Client::Executor::Auto;
+    use Ukigumo::Client::Notify::Debug;
+    use Ukigumo::Client::Notify::Ikachan;
 
-	my $app = Ukigumo::Client->new(
-		vc   => Ukigumo::Client::VC::Git->new(
-			branch     => $branch,
-			repository => $repo,
-		),
-		executor   => Ukigumo::Client::Executor::Perl->new(),
-		server_url => $server_url,
-		project    => $project,
-	);
-	$app->push_notifier(
-		Ukigumo::Client::Notify::Ikachan->new(
-			url     => $ikachan_url,
-			channel => $ikachan_channel,
-		)
-	);
-	$app->run();
+    my $app = Ukigumo::Client->new(
+        vc   => Ukigumo::Client::VC::Git->new(
+            branch     => $branch,
+            repository => $repo,
+        ),
+        executor   => Ukigumo::Client::Executor::Perl->new(),
+        server_url => $server_url,
+        project    => $project,
+    );
+    $app->push_notifier(
+        Ukigumo::Client::Notify::Ikachan->new(
+            url     => $ikachan_url,
+            channel => $ikachan_channel,
+        )
+    );
+    $app->run();
 
 =head1 DESCRIPTION
 

@@ -82,14 +82,17 @@ ukigumo-client.pl - ukigumo client script
 
     % ukigumo-client.pl --repo=git://... --server_url=http://...
     % ukigumo-client.pl --repo=git://... --server_url=http://... --branch foo
+    % ukigumo-client.pl --repo=git://... --server_url=http://... --command 'go test'
 
         --repo=s             URL for repository
+        --project=s          project name(optional)
         --vc                 version controll system('Git' by default)
         --workdir=s          workdir directory for working(optional)
         --branch=s           branch name(VC::{vc}->default_branch by default)
-        --server_url=s       Ukigumo server url(using app.psgi)
+        --server_url|s=s     Ukigumo server url(using app.psgi)
         --ikachan_url=s      API endpoint URL for ikachan
         --ikachan_channel=s  channel to post message
+        --command=s          command line for testing(optional)
         --skip_if_unmodified skip testing if repository is unmodified
 
 =head1 DESCRIPTION
