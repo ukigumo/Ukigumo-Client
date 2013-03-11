@@ -119,34 +119,11 @@ sub run {
         }
         my $vc_log = $self->vc->get_log($orig_revision, $current_revision);
 
-        my $conf = do {
-            if (-e '.ukigumo.yml') {
-                my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
-                $self->log("Bad .ukigumo.yml: $@") if $@;
-                $y ? $y->[0] : undef;
-            } else {
-                undef;
-            }
-        };
+        my $conf = $self->load_config();
+
         $self->run_commands($conf, 'before_install');
 
-        # Installing deps
-        my $install = do {
-            if ($conf->{install}) {
-                $conf->{install};
-            } else {
-                if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
-                    'cpanm --notest .';
-                } else {
-                    undef;
-                }
-            }
-        };
-        if ($install) {
-            $self->log("[install] $install");
-            system($install)
-                == 0 or die "Failure in installing: $install";
-        }
+        $self->install($conf);
 
         $self->run_commands($conf, 'before_script');
 
@@ -159,7 +136,9 @@ sub run {
 
         $self->run_commands($conf, 'after_script');
 
-        my ($report_url, $last_status) = $self->send_to_server($status, $current_revision, $vc_log);
+        my ($report_url, $last_status) = $self->send_to_server(
+            $status, $current_revision, $vc_log
+        );
 
         $self->log("sending notification: @{[ $self->branch ]}, $status");
         for my $notify (@{$self->notifiers}) {
@@ -168,6 +147,41 @@ sub run {
     }
 
     $self->log("end testing");
+}
+
+sub load_config {
+    my $self = shift;
+
+    if ( -e '.ukigumo.yml' ) {
+        my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
+        $self->log("Bad .ukigumo.yml: $@") if $@;
+        $y ? $y->[0] : undef;
+    }
+    else {
+        undef;
+    }
+}
+
+# Install deps
+sub install {
+    my ($self, $conf) = @_;
+
+    my $install = do {
+        if ($conf->{install}) {
+            $conf->{install};
+        } else {
+            if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
+                'cpanm --notest .';
+            } else {
+                undef;
+            }
+        }
+    };
+    if ($install) {
+        $self->log("[install] $install");
+        system($install)
+            == 0 or die "Failure in installing: $install";
+    }
 }
 
 sub run_commands {
