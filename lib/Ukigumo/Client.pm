@@ -171,7 +171,7 @@ sub install {
             $conf->{install};
         } else {
             if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
-                'cpanm --notest .';
+                'cpanm --notest --installdeps .';
             } else {
                 undef;
             }
