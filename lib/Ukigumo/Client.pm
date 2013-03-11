@@ -141,12 +141,30 @@ sub run {
         );
 
         $self->log("sending notification: @{[ $self->branch ]}, $status");
+        $self->_load_notifications($conf);
         for my $notify (@{$self->notifiers}) {
             $notify->send($self, $status, $last_status, $report_url);
         }
     }
 
     $self->log("end testing");
+}
+
+sub _load_notifications {
+    my ($self, $conf) = @_;
+    for my $type (keys %{$conf->{notifications}}) {
+        if ($type eq 'ikachan') {
+            my $c = $conf->{notifications}->{$type};
+               $c = [$c] unless ref $c eq 'ARRAY';
+
+            for my $args (@$c) {
+                my $notifier = Ukigumo::Client::Notify::Ikachan->new($args);
+                push @{$self->{notifiers}}, $notifier;
+            }
+        } else {
+            die "Unknown notification type: $type";
+        }
+    }
 }
 
 sub load_config {
