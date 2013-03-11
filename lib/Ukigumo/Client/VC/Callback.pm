@@ -34,8 +34,8 @@ has 'default_branch_cb' => (
 
 sub default_branch {
     my $self = shift;
-    $self->default_branch_cb(@_);
-};
+    $self->default_branch_cb->(@_);
+}
 
 sub get_revision {
 	my $self = shift;

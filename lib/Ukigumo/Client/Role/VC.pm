@@ -27,6 +27,12 @@ has description => (
 	}
 );
 
+has skip_if_unmodified => (
+    is  => 'ro',
+    isa => 'Bool',
+    default => undef,
+);
+
 requires qw(
 	get_revision
 	update

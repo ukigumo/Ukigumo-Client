@@ -7,28 +7,32 @@ use Test::Requires 'LWP::Protocol::PSGI';
 use Ukigumo::Client;
 use Ukigumo::Client::VC::Callback;
 use Ukigumo::Client::Executor::Callback;
-use Ukigumo::Client::Notify::Callback;
 use Ukigumo::Constants;
 use JSON;
 
 my $REPORT_URL = 'http://...';
+my $test_count = 0;
 LWP::Protocol::PSGI->register(sub{
-	ok 1;
+    ok 1;
+    $test_count++;
 
-	[200, ['Content-Type' => 'text/json'], [
-		encode_json(+{
-			report => {
-				url => $REPORT_URL,
-			},
-		})
-	]];
+    [200, ['Content-Type' => 'text/json'], [
+        encode_json(+{
+            report => {
+                url => 'http://...',
+            },
+        })
+    ]];
 });
 
+my @revisions = qw/aaa bbb bbb bbb/;
 my $client = Ukigumo::Client->new(
     vc => Ukigumo::Client::VC::Callback->new(
-        update_cb  => sub { },
-        branch     => 'master',
-        repository => 'git:...',
+        update_cb          => sub { },
+        branch             => 'master',
+        repository         => 'git:...',
+        skip_if_unmodified => 1,
+        revision_cb => sub { shift @revisions },
     ),
     server_url => 'http://localhost/',
     executor   => Ukigumo::Client::Executor::Callback->new(
@@ -39,17 +43,10 @@ my $client = Ukigumo::Client->new(
     quiet => 1,
 );
 
-$client->push_notifier(
-    Ukigumo::Client::Notify::Callback->new(
-        send_cb => sub {
-            my ($c, $status, $last_status, $report_url) = @_;
-            is $status,     STATUS_NA;
-            ok !$last_status;
-            is $report_url, $REPORT_URL;
-        }
-    ),
-);
+$client->run();
+is $test_count, 1;
 
 $client->run();
+is $test_count, 1;
 
 done_testing;

@@ -2,7 +2,7 @@ package Ukigumo::Client;
 use strict;
 use warnings;
 use 5.008001;
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use Carp ();
 use Capture::Tiny;
@@ -19,6 +19,7 @@ use JSON qw(decode_json);
 use File::Temp;
 use File::HomeDir;
 use URI::Escape qw(uri_escape);
+use YAML::Tiny;
 
 use Ukigumo::Constants;
 
@@ -111,20 +112,104 @@ sub run {
         my $orig_revision = $self->vc->get_revision();
         $self->vc->update($self, $workdir);
         my $current_revision = $self->vc->get_revision();
+
+        if ($self->vc->skip_if_unmodified && $orig_revision eq $current_revision) {
+            $self->log('skip testing');
+            return;
+        }
         my $vc_log = $self->vc->get_log($orig_revision, $current_revision);
-		$self->log('run executor : ' . ref $self->executor);
-        my $status = $self->executor->run($self);
+
+        my $conf = $self->load_config();
+
+        $self->run_commands($conf, 'before_install');
+
+        $self->install($conf);
+
+        $self->run_commands($conf, 'before_script');
+
+        my $executor = defined($conf->{script}) ? Ukigumo::Client::Executor::Command->new(command => $conf->{script}) : $self->executor;
+
+		$self->log('run executor : ' . ref $executor);
+        my $status = $executor->run($self);
+
 		$self->log('finished testing : ' . $status);
 
-        my ($report_url, $last_status) = $self->send_to_server($status, $current_revision, $vc_log);
+        $self->run_commands($conf, 'after_script');
+
+        my ($report_url, $last_status) = $self->send_to_server(
+            $status, $current_revision, $vc_log
+        );
 
         $self->log("sending notification: @{[ $self->branch ]}, $status");
+        $self->_load_notifications($conf);
         for my $notify (@{$self->notifiers}) {
             $notify->send($self, $status, $last_status, $report_url);
         }
     }
 
     $self->log("end testing");
+}
+
+sub _load_notifications {
+    my ($self, $conf) = @_;
+    for my $type (keys %{$conf->{notifications}}) {
+        if ($type eq 'ikachan') {
+            my $c = $conf->{notifications}->{$type};
+               $c = [$c] unless ref $c eq 'ARRAY';
+
+            for my $args (@$c) {
+                my $notifier = Ukigumo::Client::Notify::Ikachan->new($args);
+                push @{$self->{notifiers}}, $notifier;
+            }
+        } else {
+            die "Unknown notification type: $type";
+        }
+    }
+}
+
+sub load_config {
+    my $self = shift;
+
+    if ( -e '.ukigumo.yml' ) {
+        my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
+        $self->log("Bad .ukigumo.yml: $@") if $@;
+        $y ? $y->[0] : undef;
+    }
+    else {
+        $self->log("There is no .ukigumo.yml");
+        undef;
+    }
+}
+
+# Install deps
+sub install {
+    my ($self, $conf) = @_;
+
+    my $install = do {
+        if ($conf->{install}) {
+            $conf->{install};
+        } else {
+            if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
+                'cpanm --notest --installdeps .';
+            } else {
+                undef;
+            }
+        }
+    };
+    if ($install) {
+        $self->log("[install] $install");
+        system($install)
+            == 0 or die "Failure in installing: $install";
+    }
+}
+
+sub run_commands {
+    my ($self, $yml, $phase) = @_;
+    for my $cmd (@{$yml->{$phase} || []}) {
+        $self->log("[${phase}] $cmd");
+        system($cmd)
+            == 0 or die "Failure in ${phase}: $cmd";
+    }
 }
 
 sub send_to_server {
@@ -192,27 +277,27 @@ Ukigumo::Client - Client library for Ukigumo
 =head1 SYNOPSIS
 
     use Ukigumo::Client;
-	use Ukigumo::Client::VC::Git;
-	use Ukigumo::Client::Executor::Auto;
-	use Ukigumo::Client::Notify::Debug;
-	use Ukigumo::Client::Notify::Ikachan;
+    use Ukigumo::Client::VC::Git;
+    use Ukigumo::Client::Executor::Auto;
+    use Ukigumo::Client::Notify::Debug;
+    use Ukigumo::Client::Notify::Ikachan;
 
-	my $app = Ukigumo::Client->new(
-		vc   => Ukigumo::Client::VC::Git->new(
-			branch     => $branch,
-			repository => $repo,
-		),
-		executor   => Ukigumo::Client::Executor::Perl->new(),
-		server_url => $server_url,
-		project    => $project,
-	);
-	$app->push_notifier(
-		Ukigumo::Client::Notify::Ikachan->new(
-			url     => $ikachan_url,
-			channel => $ikachan_channel,
-		)
-	);
-	$app->run();
+    my $app = Ukigumo::Client->new(
+        vc   => Ukigumo::Client::VC::Git->new(
+            branch     => $branch,
+            repository => $repo,
+        ),
+        executor   => Ukigumo::Client::Executor::Perl->new(),
+        server_url => $server_url,
+        project    => $project,
+    );
+    $app->push_notifier(
+        Ukigumo::Client::Notify::Ikachan->new(
+            url     => $ikachan_url,
+            channel => $ikachan_channel,
+        )
+    );
+    $app->run();
 
 =head1 DESCRIPTION
 

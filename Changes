@@ -1,5 +1,11 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.13    Wed Mar  6 11:32:13 2013
+    - Notify::Callback
+    - Executor::Command
+    - add `skip_if_unmodified` option to Role::VC and ukigumo-client.pl
+    - add `command` option to ukigumo-client.pl
+
 0.12
 
     - skip notification if $status is success and last status was skipped.
