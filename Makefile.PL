@@ -18,6 +18,7 @@ WriteMakefile(
 		'Encode::Locale' => 0,
 		'URI::Escape' => 0,
 		'Test::Requires' => 0,
+		'YAML::Tiny' => 0,
     },
     MIN_PERL_VERSION => '5.010000',
     (-d 'xt' and ($ENV{RELEASE_TESTING} || -d '.git')) ? (

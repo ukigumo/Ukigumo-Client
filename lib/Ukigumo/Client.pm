@@ -19,6 +19,7 @@ use JSON qw(decode_json);
 use File::Temp;
 use File::HomeDir;
 use URI::Escape qw(uri_escape);
+use YAML::Tiny;
 
 use Ukigumo::Constants;
 
@@ -117,8 +118,47 @@ sub run {
             return;
         }
         my $vc_log = $self->vc->get_log($orig_revision, $current_revision);
-		$self->log('run executor : ' . ref $self->executor);
-        my $status = $self->executor->run($self);
+
+        my $conf = do {
+            if (-e '.ukigumo.yml') {
+                my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
+                $self->log("Bad .ukigumo.yml: $@") if $@;
+                $y ? $y->[0] : undef;
+            } else {
+                undef;
+            }
+        };
+        if ($conf->{before_install}) {
+            for my $cmd (@{$conf->{before_install}}) {
+                $self->log("[before_install] $cmd");
+                system($cmd)
+                    == 0 or die "Fail: $cmd";
+            }
+        }
+
+        # Installing deps
+        my $install = do {
+            if ($conf->{install}) {
+                $conf->{install};
+            } else {
+                if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
+                    'cpanm --notest .';
+                } else {
+                    undef;
+                }
+            }
+        };
+        if ($install) {
+            $self->log("[install] $install");
+            system($install)
+                == 0 or die "Failure in installing: $install";
+        }
+
+        my $executor = defined($conf->{script}) ? Ukigumo::Client::Executor::Command->new(command => $conf->{script}) : $self->executor;
+
+		$self->log('run executor : ' . ref $executor);
+        my $status = $executor->run($self);
+
 		$self->log('finished testing : ' . $status);
 
         my ($report_url, $last_status) = $self->send_to_server($status, $current_revision, $vc_log);
