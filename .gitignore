@@ -18,3 +18,4 @@ META.json
 META.yml
 README
 Ukigumo-Client-*/
+^inc/
