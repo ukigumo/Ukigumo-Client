@@ -36,6 +36,7 @@ GetOptions(
 
 $repo       or do { warn "Missing mandatory option: --repo\n\n"; pod2usage() };
 $server_url or do { warn "Missing mandatory option: --server_url\n\n"; pod2usage() };
+warn "--comand option was deprecated. I'll remove in future version" if $command;
 
 $vc = 'Git' unless $vc;
 my $vc_module = "Ukigumo::Client::VC::$vc";
@@ -85,7 +86,6 @@ ukigumo-client.pl - ukigumo client script
 
     % ukigumo-client.pl --repo=git://... --server_url=http://...
     % ukigumo-client.pl --repo=git://... --server_url=http://... --branch foo
-    % ukigumo-client.pl --repo=git://... --server_url=http://... --command 'go test'
 
         --repo=s             URL for repository
         --project=s          project name(optional)
@@ -95,7 +95,6 @@ ukigumo-client.pl - ukigumo client script
         --server_url|s=s     Ukigumo server url(using app.psgi)
         --ikachan_url=s      API endpoint URL for ikachan
         --ikachan_channel=s  channel to post message
-        --command=s          command line for testing(optional)
         --skip_if_unmodified skip testing if repository is unmodified
 
 =head1 DESCRIPTION
