@@ -91,6 +91,20 @@ ukigumo-client supports part of .travis.yml detectives.</p>
 <p>Commands execute after run test script.</p>
 
 <p>(Default: none)</p>
+
+<h3>notifications</h3>
+
+<p>You can add configurations about notifications.</p>
+
+<h4>ikachan</h4>
+
+<pre><code>notifications:
+  ikachan:
+    - channel: '#deadbeef'
+      url: 'http://127.0.0.1:4979/'
+</code></pre>
+
+<p>You can notify testing result to irc server by <a href="https://metacpan.org/release/App-Ikachan">ikachan</a></p>
         </section>
 
         <footer>
