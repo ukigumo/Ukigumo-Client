@@ -176,6 +176,7 @@ sub load_config {
         $y ? $y->[0] : undef;
     }
     else {
+        $self->log("There is no .ukigumo.yml");
         undef;
     }
 }
