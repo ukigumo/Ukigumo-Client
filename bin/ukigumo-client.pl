@@ -18,6 +18,9 @@ use Ukigumo::Client::Executor::Command;
 use Ukigumo::Client::Notify::Debug;
 use Ukigumo::Client::Notify::Ikachan;
 
+$ENV{AUTOMATED_TESTING} = 1;
+$ENV{CI} = 1;
+
 GetOptions(
     'branch=s'           => \my $branch,
     'workdir=s'          => \my $workdir,
