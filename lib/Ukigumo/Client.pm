@@ -128,13 +128,7 @@ sub run {
                 undef;
             }
         };
-        if ($conf->{before_install}) {
-            for my $cmd (@{$conf->{before_install}}) {
-                $self->log("[before_install] $cmd");
-                system($cmd)
-                    == 0 or die "Fail: $cmd";
-            }
-        }
+        $self->run_commands($conf, 'before_install');
 
         # Installing deps
         my $install = do {
@@ -154,12 +148,16 @@ sub run {
                 == 0 or die "Failure in installing: $install";
         }
 
+        $self->run_commands($conf, 'before_script');
+
         my $executor = defined($conf->{script}) ? Ukigumo::Client::Executor::Command->new(command => $conf->{script}) : $self->executor;
 
 		$self->log('run executor : ' . ref $executor);
         my $status = $executor->run($self);
 
 		$self->log('finished testing : ' . $status);
+
+        $self->run_commands($conf, 'after_script');
 
         my ($report_url, $last_status) = $self->send_to_server($status, $current_revision, $vc_log);
 
@@ -170,6 +168,15 @@ sub run {
     }
 
     $self->log("end testing");
+}
+
+sub run_commands {
+    my ($self, $yml, $phase) = @_;
+    for my $cmd (@{$yml->{$phase} || []}) {
+        $self->log("[${phase}] $cmd");
+        system($cmd)
+            == 0 or die "Failure in ${phase}: $cmd";
+    }
 }
 
 sub send_to_server {
