@@ -35,3 +35,9 @@ perltidy.ERR$
 \b\.gitignore
 \.bak$
 ^Ukigumo-Client-
+^[^/]+\.gz$
+\B\.gitignore
+^\.carton/
+^carton\.lock$
+^local/
+^inc/

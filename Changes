@@ -1,5 +1,13 @@
 Revision history for Perl extension Ukigumo::Client
 
+0.15 2013-03-11T19:01:27
+
+    - Switch to Module::Build
+
+0.14 2013-03-11T15:57:55
+
+    - [Experimental] Added .ukigumo.yml support
+
 0.13    Wed Mar  6 11:32:13 2013
     - Notify::Callback
     - Executor::Command

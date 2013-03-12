@@ -58,3 +58,16 @@ Commands execute after run test script.
 
 (Default: none)
 
+### notifications
+
+You can add configurations about notifications.
+
+#### ikachan
+
+    notifications:
+      ikachan:
+        - channel: '#deadbeef'
+          url: 'http://127.0.0.1:4979/'
+
+You can notify testing result to irc server by [ikachan](https://metacpan.org/release/App-Ikachan)
+
