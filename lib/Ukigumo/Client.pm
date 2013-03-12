@@ -220,8 +220,10 @@ sub send_to_server {
     # flush log file before send it
     $self->logfh->flush();
 
+    my $server_url = $self->server_url;
+       $server_url =~ s!/$!!g;
 	my $req = 
-		POST $self->server_url . '/api/v1/report/add',
+		POST $server_url . '/api/v1/report/add',
 		Content_Type => 'form-data',
 		Content => [
 			project  => $self->project,
