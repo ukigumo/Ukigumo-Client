@@ -1,73 +1,109 @@
-Ukigumo-Client
-==============
+# NAME
 
-ukigumo-client is a cli client for ukigumo-server.
+Ukigumo::Client - Client library for Ukigumo
 
-## Usage
+# SYNOPSIS
 
-    % ukigumo-client.pl --repo=git://github.com/nekokak/p5-Teng.git
+    use Ukigumo::Client;
+    use Ukigumo::Client::VC::Git;
+    use Ukigumo::Client::Executor::Auto;
+    use Ukigumo::Client::Notify::Debug;
+    use Ukigumo::Client::Notify::Ikachan;
 
-        --workdir=s  working directory
-                     (Default: ~/.ukigumo/work/)
+    my $app = Ukigumo::Client->new(
+        vc   => Ukigumo::Client::VC::Git->new(
+            branch     => $branch,
+            repository => $repo,
+        ),
+        executor   => Ukigumo::Client::Executor::Perl->new(),
+        server_url => $server_url,
+        project    => $project,
+    );
+    $app->push_notifier(
+        Ukigumo::Client::Notify::Ikachan->new(
+            url     => $ikachan_url,
+            channel => $ikachan_channel,
+        )
+    );
+    $app->run();
 
-## .ukigumo.yml
+# DESCRIPTION
 
-    before_install:
-      - "cpanm Module::Install"
-    notifications:
-      ikachan:
-        - channel: '#deadbeef'
-          url: 'http://127.0.0.1:4979/'
+Ukigumo::Client is client library for Ukigumo.
 
-ukigumo-client.pl supports YAML configurataion like [Travis CI](http://travis-ci.org/).
-ukigumo-client supports part of .travis.yml detectives.
+# ATTRIBUTES
 
-### before_install
+- workdir
 
-Commands execute before install.
+    Working directory for the code. It's $ENV{HOME}/.ukigumo/work/$project/$branch by default.
 
-(Default: none)
+- project
 
-### install
+    Its' project name. This is a mandatory parameter.
 
-Commands *do* install.
+- logfh
 
-(Default: 'cpanm --installdeps --notest .' if there is cpanfile, Makefile.PL, or Build.PL)
+    Log file handle. It's read only parameter.
 
-### after_install
+- server\_url
 
-Commands execute after install.
+    URL of the Ukigumo server. It's required.
 
-(Default: none)
+- user\_agent
 
-### before_script
+    instance of [LWP::UserAgent](http://search.cpan.org/perldoc?LWP::UserAgent). It's have a default value.
 
-Commands execute before run test script.
+- vc
 
-(Default: none)
+    This is a version controller object. It's normally Ukigumo::Client::VC::\*. But you can write your own class.
 
-### script
+    VC::\* objects should have a following methods:
 
-Commands execute to run test script.
+        get_revision branch repository
 
-(Default: Run test case with Ukigumo::Client::Executor::Perl)
+- executor
 
-### after_script
+    This is a test executor object. It's normally Ukigumo::Client::Executor::\*. But you can write your own class.
 
-Commands execute after run test script.
+- notifiers
 
-(Default: none)
+    This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::\*. But you can write your own class.
 
-### notifications
+# METHODS
 
-You can add configurations about notifications.
+- $client->push\_notifier($notifier : Ukigumo::Client::Notify)
 
-#### ikachan
+    push a notifier object to $client->notifiers.
 
-    notifications:
-      ikachan:
-        - channel: '#deadbeef'
-          url: 'http://127.0.0.1:4979/'
+- $client->run()
 
-You can notify testing result to irc server by [ikachan](https://metacpan.org/release/App-Ikachan)
+    Run a test context.
 
+- $client->send\_to\_server($status: Int)
+
+    Send a notification to the sever.
+
+- $client->tee($command: Str)
+
+    This method runs `$command` and tee the output of the STDOUT/STDERR to the logfh.
+
+    _Return_: exit code by the `$command`.
+
+- $client->log($message)
+
+    Print `$message` and write to the logfh.
+
+# AUTHOR
+
+Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>
+
+# SEE ALSO
+
+[Ukigumo::Server](http://search.cpan.org/perldoc?Ukigumo::Server), [Ukigumo:https://github.com/ukigumo/](Ukigumo:https://github.com/ukigumo/)
+
+# LICENSE
+
+Copyright (C) Tokuhiro Matsuno
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.

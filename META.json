@@ -1,0 +1,82 @@
+{
+   "abstract" : "Client library for Ukigumo",
+   "author" : [
+      "Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Minilla/v0.0.53, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Ukigumo-Client",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "xt",
+         "inc",
+         "share",
+         "eg",
+         "examples",
+         "author"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "CPAN::Meta" : "0",
+            "CPAN::Meta::Prereqs" : "0",
+            "Module::Build" : "0.4",
+            "Module::Build::Pluggable::GithubMeta" : "0"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Pod::Wordlist::hanekomu" : "0",
+            "Test::CPAN::Meta" : "0",
+            "Test::MinimumVersion" : "0.10108",
+            "Test::Pod" : "1.41",
+            "Test::Spelling" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Capture::Tiny" : "0",
+            "Encode::Locale" : "0",
+            "File::HomeDir" : "0",
+            "JSON" : "2",
+            "LWP::UserAgent" : "6",
+            "Mouse" : "0",
+            "String::IRC" : "0",
+            "Test::Requires" : "0",
+            "Time::Piece" : "1.15",
+            "URI::Escape" : "0",
+            "Ukigumo::Common" : "0.03",
+            "YAML::Tiny" : "0",
+            "perl" : "5.008001"
+         }
+      }
+   },
+   "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ukigumo/Ukigumo-Client/issues"
+      },
+      "homepage" : "https://github.com/ukigumo/Ukigumo-Client",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ukigumo/Ukigumo-Client.git",
+         "web" : "https://github.com/ukigumo/Ukigumo-Client"
+      }
+   },
+   "version" : "0.15",
+   "x_contributors" : [
+      "mattn <mattn.jp@gmail.com>",
+      "xaicron <xaicron@gmail.com>",
+      "tokuhirom <tokuhirom@gmail.com>",
+      "Masayuki Matsuki <y.songmu@gmail.com>"
+   ]
+}

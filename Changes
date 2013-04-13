@@ -1,5 +1,7 @@
 Revision history for Perl extension Ukigumo::Client
 
+{{$NEXT}}
+
 0.15 2013-03-11T19:01:27
 
     - Switch to Module::Build
