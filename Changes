@@ -2,6 +2,10 @@ Revision history for Perl extension Ukigumo::Client
 
 {{$NEXT}}
 
+0.17 2013-04-15T14:45:26Z
+
+    - fix packaging only
+
 0.16 2013-04-13T10:16:34Z
 
     - Add Notify::Growl
