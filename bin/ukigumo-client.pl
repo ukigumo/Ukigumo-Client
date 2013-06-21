@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use utf8;
-use 5.008008;
+use 5.008001;
 use File::Spec;
 use File::Basename;
 use lib File::Spec->catdir(dirname(__FILE__), '..', 'extlib', 'lib', 'perl5');

@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.0.53, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Minilla/v0.5.3, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -29,34 +29,42 @@
          "requires" : {
             "CPAN::Meta" : "0",
             "CPAN::Meta::Prereqs" : "0",
-            "Module::Build" : "0.4",
-            "Module::Build::Pluggable::GithubMeta" : "0"
+            "Module::Build" : "0.40",
+            "perl" : "5.008001"
          }
       },
       "develop" : {
          "requires" : {
-            "Pod::Wordlist::hanekomu" : "0",
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion" : "0.10108",
             "Test::Pod" : "1.41",
-            "Test::Spelling" : "0"
+            "Test::Spellunker" : "v0.2.7"
          }
       },
       "runtime" : {
+         "recommends" : {
+            "Growl::Any" : "0"
+         },
          "requires" : {
             "Capture::Tiny" : "0",
             "Encode::Locale" : "0",
             "File::HomeDir" : "0",
+            "HTTP::Request::Common" : "0",
             "JSON" : "2",
             "LWP::UserAgent" : "6",
             "Mouse" : "0",
             "String::IRC" : "0",
-            "Test::Requires" : "0",
             "Time::Piece" : "1.15",
             "URI::Escape" : "0",
             "Ukigumo::Common" : "0.03",
             "YAML::Tiny" : "0",
             "perl" : "5.008001"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0.98",
+            "Test::Requires" : "0"
          }
       }
    },

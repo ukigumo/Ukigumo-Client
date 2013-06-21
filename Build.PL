@@ -15,7 +15,7 @@ use File::Spec;
 use CPAN::Meta;
 use CPAN::Meta::Prereqs;
 
-my $builder = Module::Build->new(
+my %args = (
     license              => 'perl',
     dynamic_config       => 0,
 
@@ -23,15 +23,30 @@ my $builder = Module::Build->new(
         'Module::Build' => 0.38,
     },
 
-    no_index    => { 'directory' => [ 'inc' ] },
-    name        => 'Ukigumo-Client',
-    module_name => 'Ukigumo::Client',
+    name            => 'Ukigumo-Client',
+    module_name     => 'Ukigumo::Client',
+    allow_pureperl => 0,
 
     script_files => [glob('script/*'), glob('bin/*')],
 
     test_files           => ((-d '.git' || $ENV{RELEASE_TESTING}) && -d 'xt') ? 't/ xt/' : 't/',
     recursive_test_files => 1,
 );
+if (-d 'share') {
+    $args{share_dir} = 'share';
+}
+
+my $builder = Module::Build->subclass(
+    class => 'MyBuilder',
+    code => q{
+        sub ACTION_distmeta {
+            die "Do not run distmeta. Install Minilla and `minil install` instead.\n";
+        }
+        sub ACTION_installdeps {
+            die "Do not run installdeps. Run `cpanm --installdeps .` instead.\n";
+        }
+    }
+)->new(%args);
 $builder->create_build_script();
 
 my $mbmeta = CPAN::Meta->load_file('MYMETA.json');
