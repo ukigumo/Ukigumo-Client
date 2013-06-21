@@ -33,27 +33,27 @@ Ukigumo::Client is client library for Ukigumo.
 
 # ATTRIBUTES
 
-- workdir
+- `workdir`
 
-    Working directory for the code. It's $ENV{HOME}/.ukigumo/work/$project/$branch by default.
+    Working directory for the code. It's `$ENV{HOME}/.ukigumo/work/$project/$branch` by default.
 
-- project
+- `project`
 
     Its' project name. This is a mandatory parameter.
 
-- logfh
+- `logfh`
 
     Log file handle. It's read only parameter.
 
-- server\_url
+- `server_url`
 
     URL of the Ukigumo server. It's required.
 
-- user\_agent
+- `user_agent`
 
     instance of [LWP::UserAgent](http://search.cpan.org/perldoc?LWP::UserAgent). It's have a default value.
 
-- vc
+- `vc`
 
     This is a version controller object. It's normally Ukigumo::Client::VC::\*. But you can write your own class.
 
@@ -61,11 +61,11 @@ Ukigumo::Client is client library for Ukigumo.
 
         get_revision branch repository
 
-- executor
+- `executor`
 
     This is a test executor object. It's normally Ukigumo::Client::Executor::\*. But you can write your own class.
 
-- notifiers
+- `notifiers`
 
     This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::\*. But you can write your own class.
 
@@ -85,13 +85,13 @@ Ukigumo::Client is client library for Ukigumo.
 
 - $client->tee($command: Str)
 
-    This method runs `$command` and tee the output of the STDOUT/STDERR to the logfh.
+    This method runs `$command` and tee the output of the STDOUT/STDERR to the `logfh`.
 
     _Return_: exit code by the `$command`.
 
 - $client->log($message)
 
-    Print `$message` and write to the logfh.
+    Print `$message` and write to the `logfh`.
 
 # AUTHOR
 

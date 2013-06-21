@@ -89,6 +89,8 @@ sub _status_color_message {
 1;
 __END__
 
+=for stopwords ikachan
+
 =head1 NAME
 
 Ukigumo::Client::Notify::Ikachan - send notification to ikachan.

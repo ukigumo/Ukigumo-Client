@@ -309,27 +309,27 @@ Ukigumo::Client is client library for Ukigumo.
 
 =over 4
 
-=item workdir
+=item C<workdir>
 
-Working directory for the code. It's $ENV{HOME}/.ukigumo/work/$project/$branch by default.
+Working directory for the code. It's C<$ENV{HOME}/.ukigumo/work/$project/$branch> by default.
 
-=item project
+=item C<project>
 
 Its' project name. This is a mandatory parameter.
 
-=item logfh
+=item C<logfh>
 
 Log file handle. It's read only parameter.
 
-=item server_url
+=item C<server_url>
 
 URL of the Ukigumo server. It's required.
 
-=item user_agent
+=item C<user_agent>
 
 instance of L<LWP::UserAgent>. It's have a default value.
 
-=item vc
+=item C<vc>
 
 This is a version controller object. It's normally Ukigumo::Client::VC::*. But you can write your own class.
 
@@ -337,11 +337,11 @@ VC::* objects should have a following methods:
 
     get_revision branch repository
 
-=item executor
+=item C<executor>
 
 This is a test executor object. It's normally Ukigumo::Client::Executor::*. But you can write your own class.
 
-=item notifiers
+=item C<notifiers>
 
 This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::*. But you can write your own class.
 
@@ -365,13 +365,13 @@ Send a notification to the sever.
 
 =item $client->tee($command: Str)
 
-This method runs C<< $command >> and tee the output of the STDOUT/STDERR to the logfh.
+This method runs C<< $command >> and tee the output of the STDOUT/STDERR to the C<logfh>.
 
 I<Return>: exit code by the C<< $command >>.
 
 =item $client->log($message)
 
-Print C<< $message >> and write to the logfh.
+Print C<< $message >> and write to the C<logfh>.
 
 =back
 
