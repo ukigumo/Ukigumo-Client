@@ -39,9 +39,7 @@ Revision history for Perl module Ukigumo::Client
 0.10 2011-11-08
 
     - no feature changes
-
-0.09 unknown
-
+    - 0.09 wasn't released to CPAN. Changes of 0.09 bellow.
     - VC::SVN(xaicron)
     - d6c85db reset revision after update
     - e9c930f maybe better for tee_merged
