@@ -1,4 +1,4 @@
-Revision history for Perl extension Ukigumo::Client
+Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
@@ -19,63 +19,66 @@ Revision history for Perl extension Ukigumo::Client
 
     - [Experimental] Added .ukigumo.yml support
 
-0.13    Wed Mar  6 11:32:13 2013
+0.13 2013-03-06 11:32:13
+
     - Notify::Callback
     - Executor::Command
     - add `skip_if_unmodified` option to Role::VC and ukigumo-client.pl
     - add `command` option to ukigumo-client.pl
 
-0.12
+0.12 2011-11-15
 
     - skip notification if $status is success and last status was skipped.
 
-0.11
+0.11 2011-11-11
 
-    * 8a6f9d8 better diag on http response error
-    * b9febd1 Notify::Ikachan: ignore STATUS_SKIP by default.
-    * depend to Ukigumo::Common 0.03
+    - 8a6f9d8 better diag on http response error
+    - b9febd1 Notify::Ikachan: ignore STATUS_SKIP by default.
+    - depend to Ukigumo::Common 0.03
 
-0.10
+0.10 2011-11-08
 
     - no feature changes
 
-0.09
+0.09 unknown
 
     - VC::SVN(xaicron)
-    * d6c85db reset revision after update
-    * e9c930f maybe better for tee_merged
-    * 4852ef8 forgotten substituting
+    - d6c85db reset revision after update
+    - e9c930f maybe better for tee_merged
+    - 4852ef8 forgotten substituting
 
-0.08
+0.08 2011-10-20
 
     - fixed packaging issue
 
-0.07
+0.07 2011-10-19
 
     - better packaging
 
-0.06
+0.06 2011-10-11
 
     - fixed packaging issue
 
-0.05
+0.05 2011-10-04
 
     - [Notify::Ikachan] make ignore_success option as '1' by default.
 
-0.04
+0.04 2011-10-04
 
     - allow '/' character in branch name
 
-0.03
+0.03 2011-10-02
 
     - better error message on ukigumo-client.pl
     - doc fix
 
-0.02
+0.02 2011-10-02
 
     - win32 fix(mattn++)
     - added Executor::Callback
     - added VC::Callback
 
-0.01    Sat Sep  3 19:14:47 2011
-        - original version
+0.01 2011-09-03 19:14:47
+
+    - original version
+
