@@ -2,6 +2,12 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.18 2013-07-25T17:35:35Z
+
+    - fix dependencies
+    - fix spelling errors
+    - adjust Formatting of Changes for CPAN::Changes::Spec (neilbowers)
+
 0.17 2013-04-15T14:45:26Z
 
     - fix packaging only

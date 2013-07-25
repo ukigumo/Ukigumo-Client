@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.5.3, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Minilla/v0.5.6, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -80,11 +80,12 @@
          "web" : "https://github.com/ukigumo/Ukigumo-Client"
       }
    },
-   "version" : "0.17",
+   "version" : "0.18",
    "x_contributors" : [
       "mattn <mattn.jp@gmail.com>",
       "xaicron <xaicron@gmail.com>",
       "tokuhirom <tokuhirom@gmail.com>",
+      "Neil Bowers <neil@bowers.com>",
       "Masayuki Matsuki <y.songmu@gmail.com>"
    ]
 }
