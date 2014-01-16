@@ -155,6 +155,8 @@ sub _load_notifications {
     my ($self, $conf) = @_;
     for my $type (keys %{$conf->{notifications}}) {
         if ($type eq 'ikachan') {
+            require Ukigumo::Client::Notify::Ikachan;
+
             my $c = $conf->{notifications}->{$type};
                $c = [$c] unless ref $c eq 'ARRAY';
 
