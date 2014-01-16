@@ -22,6 +22,7 @@ use URI::Escape qw(uri_escape);
 use YAML::Tiny;
 
 use Ukigumo::Constants;
+use Ukigumo::Client::Executor::Command;
 
 use Mouse;
 
