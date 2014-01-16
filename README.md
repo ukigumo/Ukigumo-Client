@@ -51,7 +51,7 @@ Ukigumo::Client is client library for Ukigumo.
 
 - `user_agent`
 
-    instance of [LWP::UserAgent](http://search.cpan.org/perldoc?LWP::UserAgent). It's have a default value.
+    instance of [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent). It's have a default value.
 
 - `vc`
 
@@ -99,7 +99,7 @@ Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>
 
 # SEE ALSO
 
-[Ukigumo::Server](http://search.cpan.org/perldoc?Ukigumo::Server), [Ukigumo:https://github.com/ukigumo/](Ukigumo:https://github.com/ukigumo/)
+[Ukigumo::Server](https://metacpan.org/pod/Ukigumo::Server), [Ukigumo:https://github.com/ukigumo/](Ukigumo:https://github.com/ukigumo/)
 
 # LICENSE
 

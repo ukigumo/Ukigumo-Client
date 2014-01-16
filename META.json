@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.5.6, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.133380",
    "license" : [
       "perl_5"
    ],
@@ -21,7 +21,8 @@
          "share",
          "eg",
          "examples",
-         "author"
+         "author",
+         "builder"
       ]
    },
    "prereqs" : {
@@ -84,8 +85,8 @@
    "x_contributors" : [
       "mattn <mattn.jp@gmail.com>",
       "xaicron <xaicron@gmail.com>",
-      "tokuhirom <tokuhirom@gmail.com>",
       "Neil Bowers <neil@bowers.com>",
-      "Masayuki Matsuki <y.songmu@gmail.com>"
+      "Masayuki Matsuki <y.songmu@gmail.com>",
+      "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ]
 }
