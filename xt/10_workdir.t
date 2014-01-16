@@ -29,7 +29,7 @@ my $client = Ukigumo::Client->new(
     ),
     server_url => 'http://localhost/',
     executor   => Ukigumo::Client::Executor::Perl->new(),
-    quiet => 1,
+    quiet => 0,
 );
 $client->run();
 

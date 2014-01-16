@@ -2,6 +2,11 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.19 2014-01-16T06:48:30Z
+
+    - Load Ukigumo::Client::Executor::Command expressly.
+      (tokuhirom)
+
 0.18 2013-07-25T17:35:35Z
 
     - fix dependencies
