@@ -175,7 +175,14 @@ sub load_config {
 
     if ( -e '.ukigumo.yml' ) {
         my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
-        $self->log("Bad .ukigumo.yml: $@") if $@;
+        if (my $e = $@) {
+            $self->log("YAML syntax error in .ukigumo.yml: $e");
+            die ".ukigumo.yml: $e\n";
+        }
+        unless (defined $y) {
+            $self->log("ukigumo.yml does not contain anything");
+            die ".ukigumo.yml: does not contain anything\n";
+        }
         $y ? $y->[0] : undef;
     }
     else {
