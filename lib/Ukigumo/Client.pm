@@ -20,6 +20,8 @@ use File::Temp;
 use File::HomeDir;
 use URI::Escape qw(uri_escape);
 use YAML::Tiny;
+use Cwd;
+use Scope::Guard;
 
 use Ukigumo::Constants;
 use Ukigumo::Client::Executor::Command;
@@ -99,6 +101,12 @@ sub push_notifier {
 sub run {
     my $self = shift;
 
+    # Back to original directory, after work.
+    my $orig_cwd = Cwd::getcwd();
+    my $guard = Scope::Guard->new(
+        sub { chdir $orig_cwd }
+    );
+
     my $workdir = File::Spec->catdir( $self->workdir, uri_escape($self->project), uri_escape($self->branch) );
 
     $self->log("ukigumo-client $VERSION");
@@ -173,7 +181,7 @@ sub _load_notifications {
 sub load_config {
     my $self = shift;
 
-    if ( -e '.ukigumo.yml' ) {
+    if ( -f '.ukigumo.yml' ) {
         my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
         if (my $e = $@) {
             $self->log("YAML syntax error in .ukigumo.yml: $e");

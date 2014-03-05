@@ -11,6 +11,7 @@ requires 'Encode::Locale' => 0;
 requires 'URI::Escape' => 0;
 requires 'YAML::Tiny' => 0;
 requires 'HTTP::Request::Common';
+requires 'Scope::Guard';
 
 recommends 'Growl::Any';
 
