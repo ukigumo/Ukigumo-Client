@@ -3,6 +3,8 @@ use warnings;
 use utf8;
 use Test::More;
 use Test::Requires 'LWP::Protocol::PSGI';
+use File::Temp;
+use Cwd;
 
 use Ukigumo::Client;
 use Ukigumo::Client::VC::Callback;
@@ -25,6 +27,8 @@ LWP::Protocol::PSGI->register(sub{
     ]];
 });
 
+my $tmpdir = File::Temp::tempdir(CLEANUP => 1);
+
 my @revisions = qw/aaa bbb bbb bbb/;
 my $client = Ukigumo::Client->new(
     vc => Ukigumo::Client::VC::Callback->new(
@@ -40,6 +44,7 @@ my $client = Ukigumo::Client->new(
             return STATUS_NA;
         }
     ),
+    workdir => $tmpdir,
     quiet => 1,
 );
 
