@@ -30,8 +30,7 @@
          "requires" : {
             "CPAN::Meta" : "0",
             "CPAN::Meta::Prereqs" : "0",
-            "Module::Build" : "0.40",
-            "perl" : "5.008001"
+            "Module::Build" : "0.38"
          }
       },
       "develop" : {
@@ -54,6 +53,7 @@
             "JSON" : "2",
             "LWP::UserAgent" : "6",
             "Mouse" : "0",
+            "Scope::Guard" : "0",
             "String::IRC" : "0",
             "Time::Piece" : "1.15",
             "URI::Escape" : "0",
@@ -64,6 +64,8 @@
       },
       "test" : {
          "requires" : {
+            "File::Temp" : "0",
+            "File::pushd" : "0",
             "Test::More" : "0.98",
             "Test::Requires" : "0"
          }
@@ -81,7 +83,7 @@
          "web" : "https://github.com/ukigumo/Ukigumo-Client"
       }
    },
-   "version" : "0.20",
+   "version" : "0.21",
    "x_contributors" : [
       "mattn <mattn.jp@gmail.com>",
       "xaicron <xaicron@gmail.com>",
