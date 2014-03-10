@@ -371,6 +371,10 @@ This is a test executor object. It's normally Ukigumo::Client::Executor::*. But 
 
 This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::*. But you can write your own class.
 
+=item C<compare_url>
+
+URL to compare differences between range of commitments.
+
 =back
 
 =head1 METHODS
