@@ -92,6 +92,13 @@ has 'notifiers' => (
     is       => 'rw',
     default  => sub { +[ ] },
 );
+
+has 'compare_url' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => '',
+);
+
 sub push_notifier {
     my $self = shift;
     push @{$self->notifiers}, @_;
@@ -251,6 +258,7 @@ sub send_to_server {
 			status   => $status,
             vc_log   => $vc_log,
 			body     => [$self->logfh->filename],
+            compare_url => $self->compare_url,
 		];
 	my $res = $ua->request($req);
 	$res->is_success or die "Cannot send a report to @{[ $self->server_url ]}/api/v1/report/add:\n" . $res->as_string;
@@ -362,6 +370,10 @@ This is a test executor object. It's normally Ukigumo::Client::Executor::*. But 
 =item C<notifiers>
 
 This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::*. But you can write your own class.
+
+=item C<compare_url>
+
+URL to compare differences between range of commitments.
 
 =back
 
