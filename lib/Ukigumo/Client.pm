@@ -159,7 +159,7 @@ sub run {
         $self->log("sending notification: @{[ $self->branch ]}, $status");
         $self->_load_notifications($conf);
         for my $notify (@{$self->notifiers}) {
-            $notify->send($self, $status, $last_status, $report_url);
+            $notify->send($self, $status, $last_status, $report_url, $current_revision);
         }
     }
 
