@@ -4,7 +4,7 @@ requires 'JSON' => 2;
 requires 'Mouse' => 0;
 requires 'File::HomeDir' => 0;
 requires 'String::IRC' => 0;
-requires 'Ukigumo::Common' => 0.03;
+requires 'Ukigumo::Common' => 0.04;
 requires 'Time::Piece' => '1.15';
 requires 'Capture::Tiny' => 0;
 requires 'Encode::Locale' => 0;
@@ -21,3 +21,8 @@ on test => sub {
     requires 'File::Temp';
     requires 'File::pushd';
 };
+
+on develop => sub {
+    requires 'LWP::Protocol::PSGI';
+};
+
