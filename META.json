@@ -35,6 +35,7 @@
       },
       "develop" : {
          "requires" : {
+            "LWP::Protocol::PSGI" : "0",
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion" : "0.10108",
             "Test::Pod" : "1.41",
@@ -57,7 +58,7 @@
             "String::IRC" : "0",
             "Time::Piece" : "1.15",
             "URI::Escape" : "0",
-            "Ukigumo::Common" : "0.03",
+            "Ukigumo::Common" : "0.04",
             "YAML::Tiny" : "0",
             "perl" : "5.008001"
          }
@@ -83,12 +84,13 @@
          "web" : "https://github.com/ukigumo/Ukigumo-Client"
       }
    },
-   "version" : "0.21",
+   "version" : "0.22",
    "x_contributors" : [
       "mattn <mattn.jp@gmail.com>",
       "xaicron <xaicron@gmail.com>",
       "Neil Bowers <neil@bowers.com>",
       "Masayuki Matsuki <y.songmu@gmail.com>",
-      "Tokuhiro Matsuno <tokuhirom@gmail.com>"
+      "Tokuhiro Matsuno <tokuhirom@gmail.com>",
+      "moznion <moznion@gmail.com>"
    ]
 }

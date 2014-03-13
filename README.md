@@ -69,6 +69,10 @@ Ukigumo::Client is client library for Ukigumo.
 
     This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::\*. But you can write your own class.
 
+- `compare_url`
+
+    URL to compare differences between range of commitments.
+
 # METHODS
 
 - $client->push\_notifier($notifier : Ukigumo::Client::Notify)

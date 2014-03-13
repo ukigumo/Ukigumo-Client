@@ -2,6 +2,13 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.22 2014-03-13T10:45:34Z
+
+    - Support compare_url (for GitHub webhooks)
+      (moznion)
+    - Support GitHub Statuses API
+      (moznion)
+
 0.21 2014-03-05T00:15:47Z
 
     - Throws exception if .ukigumo.yml is borken.
