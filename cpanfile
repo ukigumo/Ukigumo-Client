@@ -20,5 +20,9 @@ on test => sub {
     requires 'Test::Requires';
     requires 'File::Temp';
     requires 'File::pushd';
+};
+
+on develop => sub {
     requires 'LWP::Protocol::PSGI';
 };
+
