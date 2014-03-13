@@ -1,0 +1,109 @@
+package Ukigumo::Client::Notify::GitHubStatuses;
+use strict;
+use warnings;
+use utf8;
+use Mouse;
+use JSON qw/encode_json/;
+use Ukigumo::Constants;
+
+has 'api_endpoint' => (
+    is       => 'ro',
+    isa      => 'Str',
+    required => 1,
+);
+
+has 'access_token' => (
+    is       => 'ro',
+    isa      => 'Str',
+    required => 1,
+);
+
+no Mouse;
+
+sub send {
+    my ($self, $c, $status, $last_status, $report_url, $current_revision, $repository_owner, $repository_name) = @_;
+
+    my $ua = $c->user_agent;
+    $ua->default_header('Authorization' => "token $self->access_token");
+
+    my ($state, $description) = _determine_status_and_description($last_status);
+    if (!$state || !$description) {
+        # Nothing to do
+        return;
+    }
+
+    my $payload = encode_json({
+        state       => $state,
+        target_url  => $report_url,
+        description => $description,
+    });
+
+    my $destination = sprintf("%s/repos/%s/%s/statuses/%s", $self->api_endpoint, $repository_owner, $repository_name, $current_revision);
+    my $res = $ua->post($description, Content => $payload);
+
+    if ( $res->is_success ) {
+        $c->log("Set commit status to $current_revision");
+    }
+    else {
+        die "Cannot set commit status to GitHub (NOTE: please check your OAuth permission)";
+    }
+}
+
+sub _determine_status_and_description {
+    my ($last_status) = @_;
+
+    my ($state, $description);
+
+    if ($last_status eq STATUS_SUCCESS) {
+        $state       = 'success';
+        $description = 'The Ukigumo builds passed';
+    }
+    elsif ($last_status eq STATUS_FAIL) {
+        $state = 'failure';
+        $description = 'The Ukigumo builds failed';
+    }
+    elsif ($last_status eq STATUS_NA || $last_status eq STATUS_SKIP) {
+        # Nothing to do
+        return;
+    }
+    elsif ($last_status eq STATUS_PENDING) {
+        $state       = 'pending';
+        $description = 'The Ukigumo is running!';
+    }
+    else {
+        $state       = 'error';
+        $description = 'The Ukigumo builds with errores';
+    }
+
+    return ($state, $description);
+}
+
+1;
+__END__
+
+=head1 NAME
+
+Ukigumo::Client::Notify::GitHubStatuses - Set commit status for GitHub.
+
+=head1 DESCRIPTION
+
+This is a notifier class for Ukigumo, set commit status for GitHub.
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item api_endpoint
+
+URL of the GitHub API endpoint.
+
+=item access_token
+
+Access token of GitHub. It must granted C<repo:status>.
+
+=back
+
+=head1 SEE ALSO
+
+L<App::Ikachan>
+
