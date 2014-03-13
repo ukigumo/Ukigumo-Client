@@ -99,11 +99,20 @@ URL of the GitHub API endpoint.
 
 =item access_token
 
-Access token of GitHub. It must granted C<repo:status>.
+Access token of GitHub OAuth. It must granted C<repo:status>.
 
 =back
 
+=head1 SETTING EXAMPLE
+
+Example of C<.ukigumo.yml>;
+
+    notifications:
+      guthub_statuses:
+        - api_endpoint: https://api.github.com
+          access_token: __ACCESS_TOKEN__
+
 =head1 SEE ALSO
 
-L<App::Ikachan>
+L<https://developer.github.com/v3/repos/statuses/>
 
