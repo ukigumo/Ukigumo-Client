@@ -2,6 +2,11 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.24 2014-03-17T15:31:34Z
+
+    - It do not die if notifying is fail
+    - Fix a conditional branch bug
+
 0.23 2014-03-17T03:45:06Z
 
     - Fix a bug that cannot create notifier instance
