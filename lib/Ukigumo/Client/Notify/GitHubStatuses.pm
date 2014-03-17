@@ -45,7 +45,7 @@ sub send {
         $c->log("Set commit status to $current_revision");
     }
     else {
-        die "Cannot set commit status to GitHub (NOTE: please check your OAuth permission)";
+        warn "Cannot set commit status to GitHub (NOTE: please check your OAuth permission)";
     }
 }
 
