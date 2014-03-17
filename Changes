@@ -2,6 +2,10 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.23 2014-03-17T03:45:06Z
+
+    - Fix a bug that cannot create notifier instance
+
 0.22 2014-03-13T10:45:34Z
 
     - Support compare_url (for GitHub webhooks)
