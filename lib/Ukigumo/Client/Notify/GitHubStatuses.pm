@@ -39,7 +39,7 @@ sub send {
     });
 
     my $destination = sprintf("%s/repos/%s/%s/statuses/%s", $self->api_endpoint, $repository_owner, $repository_name, $current_revision);
-    my $res = $ua->post($description, Content => $payload);
+    my $res = $ua->post($destination, Content => $payload);
 
     if ( $res->is_success ) {
         $c->log("Set commit status to $current_revision");
