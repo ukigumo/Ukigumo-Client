@@ -97,6 +97,10 @@ Ukigumo::Client is client library for Ukigumo.
 
     Print `$message` and write to the `logfh`.
 
+- $client->report\_timeout()
+
+    This method always sends FAIL report to server and notifies to each notifiers.
+
 # AUTHOR
 
 Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>

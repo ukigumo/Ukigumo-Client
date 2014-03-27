@@ -2,6 +2,11 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.26 2014-03-27T23:25:33Z
+
+    - Support report_timeout() method
+      (moznion)
+
 0.25 2014-03-19T08:46:31Z
 
     - Fix a fatal typo in U::C::N::GitHubStatuses
