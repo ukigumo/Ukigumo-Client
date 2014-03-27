@@ -461,6 +461,10 @@ I<Return>: exit code by the C<< $command >>.
 
 Print C<< $message >> and write to the C<logfh>.
 
+=item $client->report_timeout()
+
+This method always sends FAIL report to server and notifies to each notifiers.
+
 =back
 
 =head1 AUTHOR
