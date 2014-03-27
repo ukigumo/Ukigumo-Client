@@ -52,7 +52,6 @@ has 'project' => (
 );
 has 'logfh' => (
     is => 'ro',
-    lazy => 1,
     default => sub { File::Temp->new(UNLINK => 1) }
 );
 has 'server_url' => (
@@ -109,11 +108,21 @@ has 'repository_name' => (
     default => '',
 );
 
+has 'vc_log' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => '',
+);
+has 'current_revision' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => '',
+);
+
 sub push_notifier {
     my $self = shift;
     push @{$self->notifiers}, @_;
 }
-
 
 sub run {
     my $self = shift;
@@ -137,13 +146,14 @@ sub run {
 		$self->log('run vc : ' . ref $self->vc);
         my $orig_revision = $self->vc->get_revision();
         $self->vc->update($self, $workdir);
-        my $current_revision = $self->vc->get_revision();
+        $self->current_revision($self->vc->get_revision());
+        my $current_revision = $self->current_revision;
 
         if ($self->vc->skip_if_unmodified && $orig_revision eq $current_revision) {
             $self->log('skip testing');
             return;
         }
-        my $vc_log = $self->vc->get_log($orig_revision, $current_revision);
+        $self->vc_log($self->vc->get_log($orig_revision, $current_revision));
 
         my $conf = $self->load_config();
 
@@ -153,7 +163,7 @@ sub run {
         my $repository_name  = $self->repository_name;
 
         for my $notify (grep { ref $_ eq NOTIFIER_GITHUBSTATUSES } @{$self->notifiers}) {
-            $notify->send($self, '', STATUS_PENDING, '', $current_revision, $repository_owner, $repository_name);
+            $notify->send($self, '', STATUS_PENDING, '', $self->current_revision, $repository_owner, $repository_name);
         }
 
         $self->run_commands($conf, 'before_install');
@@ -171,18 +181,31 @@ sub run {
 
         $self->run_commands($conf, 'after_script');
 
-        my ($report_url, $last_status) = $self->send_to_server(
-            $status, $current_revision, $vc_log
-        );
-
-        $self->log("sending notification: @{[ $self->branch ]}, $status");
-
-        for my $notify (@{$self->notifiers}) {
-            $notify->send($self, $status, $last_status, $report_url, $current_revision, $repository_owner, $repository_name);
-        }
+        $self->_reflect_result($status);
     }
 
     $self->log("end testing");
+}
+
+sub report_timeout {
+    my ($self) = @_;
+
+    $self->_reflect_result(STATUS_FAIL);
+}
+
+sub _reflect_result {
+    my ($self, $status) = @_;
+
+    my ($report_url, $last_status) = $self->send_to_server($status);
+
+    $self->log("sending notification: @{[ $self->branch ]}, $status");
+
+    my $repository_owner = $self->repository_owner;
+    my $repository_name  = $self->repository_name;
+
+    for my $notify (@{$self->notifiers}) {
+        $notify->send($self, $status, $last_status, $report_url, $self->current_revision, $repository_owner, $repository_name);
+    }
 }
 
 sub _load_notifications {
@@ -273,7 +296,7 @@ sub run_commands {
 }
 
 sub send_to_server {
-    my ($self, $status, $current_revision, $vc_log) = @_;
+    my ($self, $status) = @_;
 
 	my $ua = $self->user_agent();
 
@@ -289,9 +312,9 @@ sub send_to_server {
 			project  => $self->project,
 			branch   => $self->branch,
 			repo     => $self->repository,
-			revision => $current_revision,
+			revision => $self->current_revision,
 			status   => $status,
-            vc_log   => $vc_log,
+            vc_log   => $self->vc_log,
 			body     => [$self->logfh->filename],
             compare_url => $self->compare_url,
 		];
@@ -437,6 +460,10 @@ I<Return>: exit code by the C<< $command >>.
 =item $client->log($message)
 
 Print C<< $message >> and write to the C<logfh>.
+
+=item $client->report_timeout()
+
+This method always sends FAIL report to server and notifies to each notifiers.
 
 =back
 
