@@ -143,7 +143,7 @@ sub run {
         mkpath($workdir);
         chdir($workdir) or die "Cannot chdir(@{[ $workdir ]}): $!";
 
-		$self->log('run vc : ' . ref $self->vc);
+        $self->log('run vc : ' . ref $self->vc);
         my $orig_revision = $self->vc->get_revision();
         $self->vc->update($self, $workdir);
         $self->current_revision($self->vc->get_revision());
@@ -174,10 +174,10 @@ sub run {
 
         my $executor = defined($conf->{script}) ? Ukigumo::Client::Executor::Command->new(command => $conf->{script}) : $self->executor;
 
-		$self->log('run executor : ' . ref $executor);
+        $self->log('run executor : ' . ref $executor);
         my $status = $executor->run($self);
 
-		$self->log('finished testing : ' . $status);
+        $self->log('finished testing : ' . $status);
 
         $self->run_commands($conf, 'after_script');
 
@@ -305,24 +305,24 @@ sub send_to_server {
 
     my $server_url = $self->server_url;
        $server_url =~ s!/$!!g;
-	my $req =
-		POST $server_url . '/api/v1/report/add',
-		Content_Type => 'form-data',
-		Content => [
-			project  => $self->project,
-			branch   => $self->branch,
-			repo     => $self->repository,
-			revision => $self->current_revision,
-			status   => $status,
+    my $req =
+        POST $server_url . '/api/v1/report/add',
+        Content_Type => 'form-data',
+        Content => [
+            project  => $self->project,
+            branch   => $self->branch,
+            repo     => $self->repository,
+            revision => $self->current_revision,
+            status   => $status,
             vc_log   => $self->vc_log,
-			body     => [$self->logfh->filename],
+            body     => [$self->logfh->filename],
             compare_url => $self->compare_url,
-		];
-	my $res = $ua->request($req);
-	$res->is_success or die "Cannot send a report to @{[ $self->server_url ]}/api/v1/report/add:\n" . $res->as_string;
-	my $dat = eval { decode_json($res->decoded_content) } || $res->decoded_content . " : $@";
-	$self->log("report url: $dat->{report}->{url}");
-	my $report_url = $dat->{report}->{url} or die "Cannot get report url";
+        ];
+    my $res = $ua->request($req);
+    $res->is_success or die "Cannot send a report to @{[ $self->server_url ]}/api/v1/report/add:\n" . $res->as_string;
+    my $dat = eval { decode_json($res->decoded_content) } || $res->decoded_content . " : $@";
+    $self->log("report url: $dat->{report}->{url}");
+    my $report_url = $dat->{report}->{url} or die "Cannot get report url";
     return ($report_url, $dat->{report}->{last_status});
 }
 
@@ -346,8 +346,8 @@ sub log {
         Time::Piece->new()->strftime('[%Y-%m-%d %H:%M]'),
         '[' . $self->branch . ']', @_ )
       . "\n";
-	print STDOUT $msg unless $self->quiet;
-	print {$self->logfh} $msg;
+    print STDOUT $msg unless $self->quiet;
+    print {$self->logfh} $msg;
 }
 
 
