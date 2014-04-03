@@ -343,7 +343,7 @@ sub tee {
     my ($out) = Capture::Tiny::tee_merged {
         ( $EUID, $EGID ) = ( $UID, $GID );
         my $begin_time = time;
-        system $command
+        system $command;
         $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
     };
     $out = Encode::encode("console_in", Encode::decode("console_out", $out));
