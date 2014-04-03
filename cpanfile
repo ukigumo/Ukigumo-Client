@@ -8,7 +8,6 @@ requires 'Ukigumo::Common' => 0.04;
 requires 'Time::Piece' => '1.15';
 requires 'Capture::Tiny' => 0;
 requires 'Encode::Locale' => 0;
-requires 'URI::Escape' => 0;
 requires 'YAML::Tiny' => 0;
 requires 'HTTP::Request::Common';
 requires 'Scope::Guard';
