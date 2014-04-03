@@ -18,7 +18,6 @@ use HTTP::Request::Common qw(POST);
 use JSON qw(decode_json);
 use File::Temp;
 use File::HomeDir;
-use URI::Escape qw(uri_escape);
 use YAML::Tiny;
 use Cwd;
 use Scope::Guard;
@@ -125,6 +124,12 @@ has 'elapsed_time_sec' => (
     default => 0,
 );
 
+sub normalize_path {
+    my $path = shift;
+    $path =~ s/[^a-zA-Z0-9-_]/_/g;
+    $path;
+}
+
 sub push_notifier {
     my $self = shift;
     push @{$self->notifiers}, @_;
@@ -139,7 +144,7 @@ sub run {
         sub { chdir $orig_cwd }
     );
 
-    my $workdir = File::Spec->catdir( $self->workdir, uri_escape($self->project), uri_escape($self->branch) );
+    my $workdir = File::Spec->catdir( $self->workdir, normalize_path($self->project), normalize_path($self->branch) );
 
     $self->log("ukigumo-client $VERSION");
     $self->log("start testing : " . $self->vc->description());
