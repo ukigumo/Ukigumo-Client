@@ -119,6 +119,12 @@ has 'current_revision' => (
     default => '',
 );
 
+has 'elapsed_time_sec' => (
+    is      => 'rw',
+    isa     => 'Int',
+    default => 0,
+);
+
 sub push_notifier {
     my $self = shift;
     push @{$self->notifiers}, @_;
@@ -281,8 +287,10 @@ sub install {
     };
     if ($install) {
         $self->log("[install] $install");
+        my $begin_time = time;
         system($install)
             == 0 or die "Failure in installing: $install";
+        $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
     }
 }
 
@@ -290,15 +298,17 @@ sub run_commands {
     my ($self, $yml, $phase) = @_;
     for my $cmd (@{$yml->{$phase} || []}) {
         $self->log("[${phase}] $cmd");
+        my $begin_time = time;
         system($cmd)
             == 0 or die "Failure in ${phase}: $cmd";
+        $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
     }
 }
 
 sub send_to_server {
     my ($self, $status) = @_;
 
-	my $ua = $self->user_agent();
+    my $ua = $self->user_agent();
 
     # flush log file before send it
     $self->logfh->flush();
@@ -317,6 +327,7 @@ sub send_to_server {
             vc_log   => $self->vc_log,
             body     => [$self->logfh->filename],
             compare_url => $self->compare_url,
+            elapsed_time_sec => $self->elapsed_time_sec,
         ];
     my $res = $ua->request($req);
     $res->is_success or die "Cannot send a report to @{[ $self->server_url ]}/api/v1/report/add:\n" . $res->as_string;
@@ -326,13 +337,14 @@ sub send_to_server {
     return ($report_url, $dat->{report}->{last_status});
 }
 
-
 sub tee {
     my ($self, $command) = @_;
     $self->log("command: $command");
     my ($out) = Capture::Tiny::tee_merged {
         ( $EUID, $EGID ) = ( $UID, $GID );
+        my $begin_time = time;
         system $command
+        $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
     };
     $out = Encode::encode("console_in", Encode::decode("console_out", $out));
 
