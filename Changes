@@ -2,6 +2,12 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.27 2014-04-03T08:21:51Z
+
+    - Measure the elapsed time (moznion)
+    - Normalize paths for work directory (mattn)
+    - Fix the problem that does not work certainly on Windows (mattn)
+
 0.26 2014-03-27T23:25:33Z
 
     - Support report_timeout() method
