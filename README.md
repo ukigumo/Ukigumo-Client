@@ -74,6 +74,10 @@ Ukigumo::Client is client library for Ukigumo.
 
     URL to compare differences between range of commitments.
 
+- `elapsed_time_sec`
+
+    Elapsed time as seconds about executing tests.
+
 # METHODS
 
 - $client->push\_notifier($notifier : Ukigumo::Client::Notify)

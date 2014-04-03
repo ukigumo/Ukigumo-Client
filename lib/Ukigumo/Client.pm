@@ -450,6 +450,10 @@ This is a arrayref of notifier object. It's normally Ukigumo::Client::Notify::*.
 
 URL to compare differences between range of commitments.
 
+=item C<elapsed_time_sec>
+
+Elapsed time as seconds about executing tests.
+
 =back
 
 =head1 METHODS
