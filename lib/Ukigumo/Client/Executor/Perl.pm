@@ -16,7 +16,7 @@ sub run {
         return STATUS_SUCCESS;
     } elsif (-f 'Build.PL') {
         $c->tee("perl Build.PL")==0 or return STATUS_FAIL;
-        $c->tee("./Build test")==0 or return STATUS_FAIL;
+        $c->tee($^O eq 'MSWin32' ? "Build test" : "./Build test")==0 or return STATUS_FAIL;
         return STATUS_SUCCESS;
     } else {
         $c->log("There is no Makefile.PL or Build.PL");
