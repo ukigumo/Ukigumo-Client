@@ -79,9 +79,17 @@ sub send {
 
 sub _status_color_message {
     my $status = shift;
-    my $color = $status eq STATUS_SUCCESS ? 'green'
-              : $status eq STATUS_FAIL    ? 'red'
-                                          : 'brown';
+
+    my $color;
+    if ($status eq STATUS_SUCCESS) {
+        $color = 'green';
+    }
+    elsif ($status eq STATUS_FAIL || $status eq STATUS_TIMEOUT) {
+        $color = 'red';
+    }
+    else {
+        $color = 'brown';
+    }
 
     String::IRC->new(status_str($status))->$color('white');
 }

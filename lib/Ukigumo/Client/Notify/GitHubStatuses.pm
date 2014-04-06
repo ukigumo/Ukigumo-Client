@@ -58,7 +58,7 @@ sub _determine_status_and_description {
         $state       = 'success';
         $description = 'The Ukigumo builds passed';
     }
-    elsif ($last_status eq STATUS_FAIL) {
+    elsif ($last_status eq STATUS_FAIL || $last_status eq STATUS_TIMEOUT) {
         $state = 'failure';
         $description = 'The Ukigumo builds failed';
     }

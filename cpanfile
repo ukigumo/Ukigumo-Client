@@ -5,7 +5,7 @@ requires 'Mouse' => 0;
 requires 'File::Temp';
 requires 'File::HomeDir' => 0;
 requires 'String::IRC' => 0;
-requires 'Ukigumo::Common' => 0.04;
+requires 'Ukigumo::Common' => 0.07;
 requires 'Time::Piece' => '1.15';
 requires 'Capture::Tiny' => 0;
 requires 'Encode' => '2.58';

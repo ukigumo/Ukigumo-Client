@@ -201,7 +201,7 @@ sub run {
 sub report_timeout {
     my ($self) = @_;
 
-    $self->_reflect_result(STATUS_FAIL);
+    $self->_reflect_result(STATUS_TIMEOUT);
 }
 
 sub _reflect_result {
