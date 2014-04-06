@@ -62,7 +62,7 @@
             "Scope::Guard" : "0",
             "String::IRC" : "0",
             "Time::Piece" : "1.15",
-            "Ukigumo::Common" : "0.04",
+            "Ukigumo::Common" : "0.07",
             "YAML::Tiny" : "0",
             "perl" : "5.008001"
          }
@@ -87,7 +87,7 @@
          "web" : "https://github.com/ukigumo/Ukigumo-Client"
       }
    },
-   "version" : "0.28",
+   "version" : "0.29",
    "x_contributors" : [
       "xaicron <xaicron@gmail.com>",
       "Neil Bowers <neil@bowers.com>",

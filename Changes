@@ -2,6 +2,10 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.29 2014-04-06T14:46:40Z
+
+    - Change to send STATUS_TIMEOUT
+
 0.28 2014-04-05T05:49:54Z
 
     - Add the documentation for elapsed time
