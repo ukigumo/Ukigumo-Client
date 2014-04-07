@@ -167,7 +167,7 @@ sub run {
             $self->log('skip testing');
             return;
         }
-        $self->vc_log($self->vc->get_log($orig_revision, $current_revision));
+        $self->vc_log(join '', $self->vc->get_log($orig_revision, $current_revision));
 
         my $conf = $self->load_config();
 
