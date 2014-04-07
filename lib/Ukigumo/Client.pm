@@ -152,7 +152,10 @@ sub run {
 
     {
         mkpath($workdir);
-        chdir($workdir) or die "Cannot chdir(@{[ $workdir ]}): $!";
+        unless (chdir($workdir)) {
+            $self->_reflect_result(STATUS_FAIL);
+            die "Cannot chdir(@{[ $workdir ]}): $!";
+        }
 
         $self->log('run vc : ' . ref $self->vc);
         my $orig_revision = $self->vc->get_revision();
@@ -228,6 +231,7 @@ sub _load_notifications {
         elsif ($type eq 'github_statuses') {
             $self->_load_notify_modules($conf, $type, NOTIFIER_GITHUBSTATUSES);
         } else {
+            $self->_reflect_result(STATUS_FAIL);
             die "Unknown notification type: $type";
         }
     }
@@ -261,10 +265,12 @@ sub load_config {
         my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
         if (my $e = $@) {
             $self->log("YAML syntax error in .ukigumo.yml: $e");
+            $self->_reflect_result(STATUS_FAIL);
             die ".ukigumo.yml: $e\n";
         }
         unless (defined $y) {
             $self->log("ukigumo.yml does not contain anything");
+            $self->_reflect_result(STATUS_FAIL);
             die ".ukigumo.yml: does not contain anything\n";
         }
         $y ? $y->[0] : undef;
@@ -293,8 +299,12 @@ sub install {
     if ($install) {
         $self->log("[install] $install");
         my $begin_time = time;
-        system($install)
-            == 0 or die "Failure in installing: $install";
+
+        unless (system($install) == 0) {
+            $self->_reflect_result(STATUS_FAIL);
+            die "Failure in installing: $install";
+        }
+
         $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
     }
 }
@@ -304,8 +314,12 @@ sub run_commands {
     for my $cmd (@{$yml->{$phase} || []}) {
         $self->log("[${phase}] $cmd");
         my $begin_time = time;
-        system($cmd)
-            == 0 or die "Failure in ${phase}: $cmd";
+
+        unless (system($cmd) == 0) {
+            $self->_reflect_result(STATUS_FAIL);
+            die "Failure in ${phase}: $cmd";
+        }
+
         $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
     }
 }
