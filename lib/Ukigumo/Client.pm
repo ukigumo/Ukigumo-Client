@@ -174,7 +174,7 @@ sub run {
         my $repository_name  = $self->repository_name;
 
         for my $notify (grep { ref $_ eq NOTIFIER_GITHUBSTATUSES } @{$self->notifiers}) {
-            $notify->send($self, STATUS_PENDING, '', '', $self->current_revision, $repository_owner, $repository_name);
+            $notify->send($self, STATUS_PENDING, '', '', $current_revision, $repository_owner, $repository_name);
         }
 
         $self->run_commands($conf, 'before_install');
@@ -327,7 +327,7 @@ sub send_to_server {
             project  => $self->project,
             branch   => $self->branch,
             repo     => $self->repository,
-            revision => $self->current_revision,
+            revision => substr($self->current_revision, 0, 10),
             status   => $status,
             vc_log   => $self->vc_log,
             body     => [$self->logfh->filename],

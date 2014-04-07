@@ -14,7 +14,7 @@ sub default_branch { 'master' }
 
 sub get_revision {
 	my $self = shift;
-	$self->{revision} ||= ( substr( `git rev-parse HEAD`, 0, 10 ) || 'Unknown' );
+	$self->{revision} ||= `git rev-parse HEAD` || 'Unknown';
 }
 
 sub update {

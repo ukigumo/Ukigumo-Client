@@ -42,7 +42,7 @@ has 'method' => (
 no Mouse;
 
 sub send {
-    my ($self, $c, $status, $last_status, $report_url) = @_;
+    my ($self, $c, $status, $last_status, $report_url, $current_revision) = @_;
 
     if ( $self->ignore_success && $status eq STATUS_SUCCESS && defined($last_status) && ($last_status eq STATUS_SUCCESS || $last_status eq STATUS_SKIP) ) {
         $c->log(
@@ -59,9 +59,9 @@ sub send {
     my $url = $self->url;
     $url =~ s!/$!!;    # remove trailing slash
 
-    my $message = sprintf( "%s %s [%s] %s %s",
+    my $message = sprintf( "%s %s [%s] %s %10s",
         $report_url, $c->project, $c->branch, _status_color_message($status),
-        $c->vc->get_revision() );
+        $current_revision );
     $c->log("Sending message to irc server: $message");
 
     my $res =
