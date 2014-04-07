@@ -34,6 +34,10 @@ sub update {
 
 sub get_log {
     my ($self, $rev1, $rev2) = @_;
+
+    $rev1 = substr $rev1, 0, 10;
+    $rev2 = substr $rev2, 0, 10;
+
     # -50 means limit.
     `git log --pretty=format:"%h %an: %s" --abbrev-commit --source -@{[ $self->log_limit ]} '$rev1..$rev2'`
 }
