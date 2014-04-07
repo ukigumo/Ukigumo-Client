@@ -24,7 +24,8 @@ sub send {
     my ($self, $c, $status, $last_status, $report_url, $current_revision, $repository_owner, $repository_name) = @_;
 
     my $ua = $c->user_agent;
-    $ua->default_header('Authorization' => "token $self->access_token");
+    my $access_token = $self->access_token;
+    $ua->default_header('Authorization' => "token $access_token");
 
     my ($state, $description) = _determine_status_and_description($status);
     if (!$state || !$description) {
