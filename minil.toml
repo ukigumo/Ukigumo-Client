@@ -1,2 +1,3 @@
 name = "Ukigumo-Client"
 badges = ["travis"]
+authority="cpan:TOKUHIROM"
