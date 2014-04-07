@@ -26,7 +26,7 @@ sub send {
     my $ua = $c->user_agent;
     $ua->default_header('Authorization' => "token $self->access_token");
 
-    my ($state, $description) = _determine_status_and_description($last_status);
+    my ($state, $description) = _determine_status_and_description($status);
     if (!$state || !$description) {
         # Nothing to do
         return;
@@ -50,23 +50,23 @@ sub send {
 }
 
 sub _determine_status_and_description {
-    my ($last_status) = @_;
+    my ($status) = @_;
 
     my ($state, $description);
 
-    if ($last_status eq STATUS_SUCCESS) {
+    if ($status eq STATUS_SUCCESS) {
         $state       = 'success';
         $description = 'The Ukigumo builds passed';
     }
-    elsif ($last_status eq STATUS_FAIL || $last_status eq STATUS_TIMEOUT) {
+    elsif ($status eq STATUS_FAIL || $status eq STATUS_TIMEOUT) {
         $state = 'failure';
         $description = 'The Ukigumo builds failed';
     }
-    elsif ($last_status eq STATUS_NA || $last_status eq STATUS_SKIP) {
+    elsif ($status eq STATUS_NA || $status eq STATUS_SKIP) {
         # Nothing to do
         return;
     }
-    elsif ($last_status eq STATUS_PENDING) {
+    elsif ($status eq STATUS_PENDING) {
         $state       = 'pending';
         $description = 'The Ukigumo is running!';
     }
