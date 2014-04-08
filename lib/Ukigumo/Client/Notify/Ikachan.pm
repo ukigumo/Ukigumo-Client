@@ -61,7 +61,7 @@ sub send {
 
     my $message = sprintf( "%s %s [%s] %s %s",
         $report_url, $c->project, $c->branch, _status_color_message($status),
-        sprintf($current_revision, 0, 10) );
+        substr($current_revision, 0, 10) );
     $c->log("Sending message to irc server: $message");
 
     my $res =
