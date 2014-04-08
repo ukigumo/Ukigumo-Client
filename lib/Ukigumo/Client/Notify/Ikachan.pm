@@ -59,9 +59,9 @@ sub send {
     my $url = $self->url;
     $url =~ s!/$!!;    # remove trailing slash
 
-    my $message = sprintf( "%s %s [%s] %s %10s",
+    my $message = sprintf( "%s %s [%s] %s %s",
         $report_url, $c->project, $c->branch, _status_color_message($status),
-        $current_revision );
+        sprintf($current_revision, 0, 10) );
     $c->log("Sending message to irc server: $message");
 
     my $res =
