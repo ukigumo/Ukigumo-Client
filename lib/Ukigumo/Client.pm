@@ -158,10 +158,10 @@ sub run {
         }
 
         $self->log('run vc : ' . ref $self->vc);
-        my $orig_revision = $self->vc->get_revision();
+        chomp(my $orig_revision = $self->vc->get_revision());
         $self->vc->update($self, $workdir);
         $self->current_revision($self->vc->get_revision());
-        my $current_revision = $self->current_revision;
+        chomp(my $current_revision = $self->current_revision);
 
         if ($self->vc->skip_if_unmodified && $orig_revision eq $current_revision) {
             $self->log('skip testing');
