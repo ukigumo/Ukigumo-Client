@@ -2,6 +2,11 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.30 2014-04-08T06:50:37Z
+
+    - Fix bug at GitHub Notifier
+    - Do not die with silence
+
 0.29 2014-04-06T14:46:40Z
 
     - Change to send STATUS_TIMEOUT
