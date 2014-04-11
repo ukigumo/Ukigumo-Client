@@ -35,8 +35,15 @@ sub update {
 sub get_log {
     my ($self, $rev1, $rev2) = @_;
 
-    # -50 means limit.
-    `git log --pretty=format:"%h %an: %s" --abbrev-commit --source -@{[ $self->log_limit ]} '$rev1..$rev2'`
+    my $git_log_cmd = 'git log --pretty=format:"%h %an: %s" --abbrev-commit --source ';
+    if ($rev1 eq $rev2) {
+        $git_log_cmd .= "-1 'HEAD'";
+    }
+    else {
+        $git_log_cmd .= "-@{[ $self->log_limit ]} '$rev1..$rev2'";
+    }
+
+    `$git_log_cmd`;
 }
 
 1;
