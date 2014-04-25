@@ -115,7 +115,11 @@ has 'vc_log' => (
 has 'current_revision' => (
     is      => 'rw',
     isa     => 'Str',
-    default => '',
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        $self->vc->get_revision();
+    },
 );
 
 has 'elapsed_time_sec' => (
@@ -160,7 +164,6 @@ sub run {
         $self->log('run vc : ' . ref $self->vc);
         chomp(my $orig_revision = $self->vc->get_revision());
         $self->vc->update($self, $workdir);
-        $self->current_revision($self->vc->get_revision());
         chomp(my $current_revision = $self->current_revision);
 
         if ($self->vc->skip_if_unmodified && $orig_revision eq $current_revision) {
