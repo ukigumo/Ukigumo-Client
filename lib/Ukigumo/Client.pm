@@ -110,7 +110,13 @@ has 'repository_name' => (
 has 'vc_log' => (
     is      => 'rw',
     isa     => 'Str',
-    default => '',
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        chomp(my $orig_revision    = $self->vc->get_revision());
+        chomp(my $current_revision = $self->current_revision());
+        join '', $self->vc->get_log($orig_revision, $current_revision);
+    },
 );
 has 'current_revision' => (
     is      => 'rw',
@@ -170,7 +176,6 @@ sub run {
             $self->log('skip testing');
             return;
         }
-        $self->vc_log(join '', $self->vc->get_log($orig_revision, $current_revision));
 
         my $conf = $self->load_config();
 
