@@ -210,16 +210,16 @@ sub run {
 }
 
 sub report_timeout {
-    my ($self) = @_;
+    my ($self, $log_filename) = @_;
 
     $self->elapsed_time_sec(undef);
-    $self->_reflect_result(STATUS_TIMEOUT);
+    $self->_reflect_result(STATUS_TIMEOUT, $log_filename);
 }
 
 sub _reflect_result {
-    my ($self, $status) = @_;
+    my ($self, $status, $log_filename) = @_;
 
-    my ($report_url, $last_status) = $self->send_to_server($status);
+    my ($report_url, $last_status) = $self->send_to_server($status, $log_filename);
 
     $self->log("sending notification: @{[ $self->branch ]}, $status");
 
@@ -334,7 +334,7 @@ sub run_commands {
 }
 
 sub send_to_server {
-    my ($self, $status) = @_;
+    my ($self, $status, $log_filename) = @_;
 
     my $ua = $self->user_agent();
 
@@ -353,7 +353,7 @@ sub send_to_server {
             revision => substr($self->current_revision, 0, 10),
             status   => $status,
             vc_log   => $self->vc_log,
-            body     => [$self->logfh->filename],
+            body     => [$log_filename || $self->logfh->filename],
             compare_url => $self->compare_url,
             elapsed_time_sec => $self->elapsed_time_sec,
         ];
