@@ -212,6 +212,7 @@ sub run {
 sub report_timeout {
     my ($self) = @_;
 
+    $self->elapsed_time_sec(undef);
     $self->_reflect_result(STATUS_TIMEOUT);
 }
 
