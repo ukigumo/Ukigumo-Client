@@ -112,7 +112,7 @@ Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>
 
 # SEE ALSO
 
-[Ukigumo::Server](https://metacpan.org/pod/Ukigumo::Server), [Ukigumo:https://github.com/ukigumo/](Ukigumo:https://github.com/ukigumo/)
+[Ukigumo::Server](https://metacpan.org/pod/Ukigumo::Server), [Ukigumo](https://github.com/ukigumo/)
 
 # LICENSE
 

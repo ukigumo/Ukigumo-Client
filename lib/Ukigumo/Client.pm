@@ -517,7 +517,7 @@ Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
 
 =head1 SEE ALSO
 
-L<Ukigumo::Server>, L<Ukigumo:https://github.com/ukigumo/>
+L<Ukigumo::Server>, L<Ukigumo|https://github.com/ukigumo/>
 
 =head1 LICENSE
 
