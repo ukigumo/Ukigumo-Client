@@ -38,7 +38,7 @@ has 'workdir' => (
     },
 );
 has 'project' => (
-    is => 'ro',
+    is => 'rw',
     isa => 'Str',
     default => sub {
         my $self = shift;
@@ -181,6 +181,10 @@ sub run {
 
         local %ENV = %ENV;
         $self->_set_env_var($conf);
+
+        if (my $project_name = $conf->{project_name}) {
+            $self->project($project_name);
+        }
 
         $self->_load_notifications($conf);
 
