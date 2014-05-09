@@ -1,7 +1,7 @@
 package Ukigumo::Client;
 use strict;
 use warnings;
-use 5.008001;
+use 5.010;
 our $VERSION = '0.31';
 
 use Carp ();
@@ -24,6 +24,7 @@ use Scope::Guard;
 
 use Ukigumo::Constants;
 use Ukigumo::Client::Executor::Command;
+use Ukigumo::Client::EnvVar;
 
 use Mouse;
 
@@ -178,6 +179,12 @@ sub run {
         }
 
         my $conf = $self->load_config();
+
+        my $env_var = Ukigumo::Client::EnvVar->new;
+        $env_var->set($conf);
+        my $guard = Scope::Guard->new(
+            sub { $env_var->restore }
+        );
 
         $self->_load_notifications($conf);
 
