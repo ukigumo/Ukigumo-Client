@@ -15,15 +15,15 @@ use JSON;
 
 my $REPORT_URL = 'http://...';
 LWP::Protocol::PSGI->register(sub{
-	ok 1;
+    ok 1;
 
-	[200, ['Content-Type' => 'text/json'], [
-		encode_json(+{
-			report => {
-				url => $REPORT_URL,
-			},
-		})
-	]];
+    [200, ['Content-Type' => 'text/json'], [
+        encode_json(+{
+            report => {
+                url => $REPORT_URL,
+            },
+        })
+    ]];
 });
 
 my $pushd = pushd(File::Temp::tempdir(CLEANUP => 1));
