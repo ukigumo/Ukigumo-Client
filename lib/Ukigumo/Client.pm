@@ -1,7 +1,7 @@
 package Ukigumo::Client;
 use strict;
 use warnings;
-use 5.010;
+use 5.008001;
 our $VERSION = '0.31';
 
 use Carp ();
@@ -24,7 +24,6 @@ use Scope::Guard;
 
 use Ukigumo::Constants;
 use Ukigumo::Client::Executor::Command;
-use Ukigumo::Client::EnvVar;
 
 use Mouse;
 
@@ -180,11 +179,8 @@ sub run {
 
         my $conf = $self->load_config();
 
-        my $env_var = Ukigumo::Client::EnvVar->new;
-        $env_var->set($conf);
-        my $guard = Scope::Guard->new(
-            sub { $env_var->restore }
-        );
+        local %ENV = %ENV;
+        $self->_set_env_var($conf);
 
         $self->_load_notifications($conf);
 
@@ -272,6 +268,20 @@ sub _convert_module_name_to_module_path {
 
     $module_name =~ s!::!/!g;
     return $module_name . '.pm';
+}
+
+sub _set_env_var {
+    my ($self, $conf) = @_;
+
+    my $env = $conf->{env};
+    if ($env && (my $ref = ref $env) ne 'ARRAY') {
+        $self->_reflect_result(STATUS_FAIL);
+        die "`env` must be array reference: in spite of it was given `$ref`";
+    }
+    for my $e (@$env) {
+        my ($k, $v) = %$e;
+        $ENV{$k} = $v;
+    }
 }
 
 sub load_config {

@@ -1,4 +1,4 @@
-requires 'perl', '5.010';
+requires 'perl', '5.008001';
 requires 'LWP::UserAgent' => 6;
 requires 'JSON' => 2;
 requires 'Mouse' => 0;
@@ -16,7 +16,6 @@ requires 'Scope::Guard';
 requires 'Pod::Usage';
 requires 'Getopt::Long' => '2.42';
 requires 'File::Path';
-requires 'Parse::Yapp::KeyValue';
 
 recommends 'Growl::Any';
 
