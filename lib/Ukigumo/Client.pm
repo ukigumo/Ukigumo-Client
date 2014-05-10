@@ -342,16 +342,30 @@ sub tee {
 
 sub infof {
     my $self = shift;
-    my $msg = $self->logger->infof(@_);
-    print STDOUT $msg unless $self->quiet;
-    print {$self->logfh} $msg;
+
+    my $STDERR = *STDERR;
+
+    local *STDERR = $self->logfh;
+    $self->logger->infof(@_);
+
+    unless ($self->quiet) {
+        *STDERR = $STDERR;
+        $self->logger->infof(@_);
+    }
 }
 
 sub warnf {
     my $self = shift;
-    my $msg = $self->logger->warnf(@_);
-    print STDOUT $msg unless $self->quiet;
-    print {$self->logfh} $msg;
+
+    my $STDERR = *STDERR;
+
+    local *STDERR = $self->logfh;
+    $self->logger->warnf(@_);
+
+    unless ($self->quiet) {
+        *STDERR = $STDERR;
+        $self->logger->warnf(@_);
+    }
 }
 
 1;
