@@ -7,7 +7,6 @@ requires 'File::Temp';
 requires 'File::HomeDir' => 0;
 requires 'String::IRC' => 0;
 requires 'Ukigumo::Common' => 0.09;
-requires 'Time::Piece' => '1.15';
 requires 'Capture::Tiny' => 0;
 requires 'Encode' => '2.58';
 requires 'Encode::Locale' => 0;

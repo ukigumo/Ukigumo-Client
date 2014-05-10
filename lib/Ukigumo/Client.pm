@@ -11,14 +11,11 @@ use Encode;
 use File::Spec;
 use File::Path qw(mkpath);
 use LWP::UserAgent;
-use Time::Piece;
 use English '-no_match_vars';
-use File::Basename qw(dirname);
 use HTTP::Request::Common qw(POST);
 use JSON qw(decode_json);
 use File::Temp;
 use File::HomeDir;
-use YAML::Tiny;
 use Cwd;
 use Scope::Guard;
 
