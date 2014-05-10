@@ -45,12 +45,12 @@ sub send {
     my ($self, $c, $status, $last_status, $report_url, $current_revision) = @_;
 
     if ( $self->ignore_success && $status eq STATUS_SUCCESS && defined($last_status) && ($last_status eq STATUS_SUCCESS || $last_status eq STATUS_SKIP) ) {
-        $c->log(
+        $c->infof(
             "The test was succeeded. There is no reason to notify($status, $last_status).");
         return;
     }
     if ( $self->ignore_skip && $status eq STATUS_SKIP ) {
-        $c->log( "The test was skiped. There is no reason to notify.");
+        $c->infof( "The test was skiped. There is no reason to notify.");
         return;
     }
 
@@ -62,13 +62,13 @@ sub send {
     my $message = sprintf( "%s %s [%s] %s %s",
         $report_url, $c->project, $c->branch, _status_color_message($status),
         substr($current_revision, 0, 10) );
-    $c->log("Sending message to irc server: $message");
+    $c->infof("Sending message to irc server: $message");
 
     my $res =
         $ua->post( "$url/$self->{method}",
         { channel => $self->channel, message => $message } );
     if ( $res->is_success ) {
-        $c->log("Sent notification for $self->{url} $self->{channel}");
+        $c->infof("Sent notification for $self->{url} $self->{channel}");
     }
     else {
         die "Cannot send ikachan notification: "
