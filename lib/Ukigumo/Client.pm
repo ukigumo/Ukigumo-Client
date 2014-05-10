@@ -23,6 +23,7 @@ use Cwd;
 use Scope::Guard;
 
 use Ukigumo::Constants;
+use Ukigumo::Client::CommandRunner;
 use Ukigumo::Client::Executor::Command;
 use Ukigumo::Client::YamlConfig;
 use Ukigumo::Logger;
@@ -207,20 +208,20 @@ sub run {
             $notify->send($self, STATUS_PENDING, '', '', $current_revision, $repository_owner, $repository_name);
         }
 
-        $self->run_commands($conf, 'before_install');
+        my $command_runner = Ukigumo::Client::CommandRunner->new(c => $self, config => $conf);
 
-        $self->install($conf);
+        $command_runner->run('before_install');
+        $command_runner->run('install');
+        $command_runner->run('before_script');
 
-        $self->run_commands($conf, 'before_script');
-
-        my $executor = defined($conf->script) ? Ukigumo::Client::Executor::Command->new(command => $conf->script) : $self->executor;
+        my $executor = defined($conf->script) ? Ukigumo::Client::Executor::Command->new(command => $conf->script)
+                                              : $self->executor;
 
         $self->infof('run executor : ' . ref $executor);
         my $status = $executor->run($self);
-
         $self->infof('finished testing : ' . $status);
 
-        $self->run_commands($conf, 'after_script');
+        $command_runner->run('after_script');
 
         $self->reflect_result($status);
     }
@@ -247,49 +248,6 @@ sub reflect_result {
 
     for my $notify (@{$self->notifiers}) {
         $notify->send($self, $status, $last_status, $report_url, $self->current_revision, $repository_owner, $repository_name);
-    }
-}
-
-# Install deps
-sub install {
-    my ($self, $conf) = @_;
-
-    my $install = do {
-        if ($conf->install) {
-            $conf->install;
-        } else {
-            if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
-                'cpanm --notest --installdeps .';
-            } else {
-                undef;
-            }
-        }
-    };
-    if ($install) {
-        $self->infof("[install] $install");
-        my $begin_time = time;
-
-        unless (system($install) == 0) {
-            $self->reflect_result(STATUS_FAIL);
-            die "Failure in installing: $install";
-        }
-
-        $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
-    }
-}
-
-sub run_commands {
-    my ($self, $yml, $phase) = @_;
-    for my $cmd (@{$yml->$phase || []}) {
-        $self->infof("[${phase}] $cmd");
-        my $begin_time = time;
-
-        unless (system($cmd) == 0) {
-            $self->reflect_result(STATUS_FAIL);
-            die "Failure in ${phase}: $cmd";
-        }
-
-        $self->elapsed_time_sec($self->elapsed_time_sec + time - $begin_time);
     }
 }
 
