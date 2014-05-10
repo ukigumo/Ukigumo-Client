@@ -19,8 +19,8 @@ sub generate_config_by_yml {
     );
 }
 
-undef *Ukigumo::Client::_reflect_result;
-*Ukigumo::Client::_reflect_result = sub {};
+undef *Ukigumo::Client::reflect_result;
+*Ukigumo::Client::reflect_result = sub {};
 
 my $client = dispense_client();
 

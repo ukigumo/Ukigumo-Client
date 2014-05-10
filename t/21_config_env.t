@@ -41,9 +41,9 @@ subtest 'Set environment variable ok' => sub {
 };
 
 subtest 'Invalid env' => sub {
-    my $original__reflect_result = *Ukigumo::Client::_reflect_result{CODE};
-    undef *Ukigumo::Client::_reflect_result;
-    *Ukigumo::Client::_reflect_result = sub {};
+    my $original_reflect_result = *Ukigumo::Client::reflect_result{CODE};
+    undef *Ukigumo::Client::reflect_result;
+    *Ukigumo::Client::reflect_result = sub {};
 
     my $client = dispense_client();
 
@@ -65,8 +65,8 @@ subtest 'Invalid env' => sub {
         like $@, qr/`env` must be array reference: in spite of it was given `HASH`/;
     };
 
-    undef *Ukigumo::Client::_reflect_result;
-    *Ukigumo::Client::_reflect_result = $original__reflect_result;
+    undef *Ukigumo::Client::reflect_result;
+    *Ukigumo::Client::reflect_result = $original_reflect_result;
 };
 
 done_testing;

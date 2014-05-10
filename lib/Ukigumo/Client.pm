@@ -177,7 +177,7 @@ sub run {
     {
         mkpath($workdir);
         unless (chdir($workdir)) {
-            $self->_reflect_result(STATUS_FAIL);
+            $self->reflect_result(STATUS_FAIL);
             die "Cannot chdir(@{[ $workdir ]}): $!";
         }
 
@@ -222,7 +222,7 @@ sub run {
 
         $self->run_commands($conf, 'after_script');
 
-        $self->_reflect_result($status);
+        $self->reflect_result($status);
     }
 
     $self->infof("end testing");
@@ -232,10 +232,10 @@ sub report_timeout {
     my ($self, $log_filename) = @_;
 
     $self->elapsed_time_sec(undef);
-    $self->_reflect_result(STATUS_TIMEOUT, $log_filename);
+    $self->reflect_result(STATUS_TIMEOUT, $log_filename);
 }
 
-sub _reflect_result {
+sub reflect_result {
     my ($self, $status, $log_filename) = @_;
 
     my ($report_url, $last_status) = $self->send_to_server($status, $log_filename);
@@ -270,7 +270,7 @@ sub install {
         my $begin_time = time;
 
         unless (system($install) == 0) {
-            $self->_reflect_result(STATUS_FAIL);
+            $self->reflect_result(STATUS_FAIL);
             die "Failure in installing: $install";
         }
 
@@ -285,7 +285,7 @@ sub run_commands {
         my $begin_time = time;
 
         unless (system($cmd) == 0) {
-            $self->_reflect_result(STATUS_FAIL);
+            $self->reflect_result(STATUS_FAIL);
             die "Failure in ${phase}: $cmd";
         }
 
@@ -457,6 +457,10 @@ Run a test context.
 =item $client->send_to_server($status: Int)
 
 Send a notification to the sever.
+
+=item reflect_result($status: Int)
+
+Send a notification to the server and notify via registered notifier.
 
 =item $client->tee($command: Str)
 
