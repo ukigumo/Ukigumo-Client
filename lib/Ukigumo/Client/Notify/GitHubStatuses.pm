@@ -109,7 +109,7 @@ Access token of GitHub OAuth. It must granted C<repo:status>.
 Example of C<.ukigumo.yml>;
 
     notifications:
-      guthub_statuses:
+      github_statuses:
         - api_endpoint: https://api.github.com
           access_token: __ACCESS_TOKEN__
 
