@@ -43,7 +43,7 @@ sub send {
     my $res = $ua->post($destination, Content => $payload);
 
     if ( $res->is_success ) {
-        $c->infof("Set commit status to $current_revision");
+        $c->logger->infof("Set commit status to $current_revision");
     }
     else {
         warn "Cannot set commit status to GitHub (NOTE: please check your OAuth permission)";

@@ -22,6 +22,7 @@ use Scope::Guard;
 use Ukigumo::Constants;
 use Ukigumo::Client::CommandRunner;
 use Ukigumo::Client::Executor::Command;
+use Ukigumo::Client::Logger;
 use Ukigumo::Client::YamlConfig;
 use Ukigumo::Logger;
 
@@ -136,11 +137,15 @@ has 'elapsed_time_sec' => (
 
 has 'logger' => (
     is      => 'ro',
-    isa     => 'Ukigumo::Logger',
+    isa     => 'Ukigumo::Client::Logger',
     lazy    => 1,
     default => sub {
         my $self = shift;
-        Ukigumo::Logger->new(prefix => ['[' . $self->branch . ']']);
+        Ukigumo::Client::Logger->new(
+            logfh  => $self->logfh,
+            branch => $self->branch,
+            quiet  => $self->quiet,
+        );
     },
 );
 
@@ -168,9 +173,9 @@ sub run {
 
     my $workdir = File::Spec->catdir( $self->workdir, normalize_path($self->project), normalize_path($self->branch) );
 
-    $self->infof("ukigumo-client $VERSION");
-    $self->infof("start testing : " . $self->vc->description());
-    $self->infof("working directory : " . $workdir);
+    $self->logger->infof("ukigumo-client $VERSION");
+    $self->logger->infof("start testing : " . $self->vc->description());
+    $self->logger->infof("working directory : " . $workdir);
 
     {
         mkpath($workdir);
@@ -179,13 +184,13 @@ sub run {
             die "Cannot chdir(@{[ $workdir ]}): $!";
         }
 
-        $self->infof('run vc : ' . ref $self->vc);
+        $self->logger->infof('run vc : ' . ref $self->vc);
         chomp(my $orig_revision = $self->vc->get_revision());
         $self->vc->update($self, $workdir);
         chomp(my $current_revision = $self->current_revision);
 
         if ($self->vc->skip_if_unmodified && $orig_revision eq $current_revision) {
-            $self->infof('skip testing');
+            $self->logger->infof('skip testing');
             return;
         }
 
@@ -214,16 +219,16 @@ sub run {
         my $executor = defined($conf->script) ? Ukigumo::Client::Executor::Command->new(command => $conf->script)
                                               : $self->executor;
 
-        $self->infof('run executor : ' . ref $executor);
+        $self->logger->infof('run executor : ' . ref $executor);
         my $status = $executor->run($self);
-        $self->infof('finished testing : ' . $status);
+        $self->logger->infof('finished testing : ' . $status);
 
         $command_runner->run('after_script');
 
         $self->reflect_result($status);
     }
 
-    $self->infof("end testing");
+    $self->logger->infof("end testing");
 }
 
 sub report_timeout {
@@ -238,7 +243,7 @@ sub reflect_result {
 
     my ($report_url, $last_status) = $self->send_to_server($status, $log_filename);
 
-    $self->infof("sending notification: @{[ $self->branch ]}, $status");
+    $self->logger->infof("sending notification: @{[ $self->branch ]}, $status");
 
     my $repository_owner = $self->repository_owner;
     my $repository_name  = $self->repository_name;
@@ -275,14 +280,14 @@ sub send_to_server {
     my $res = $ua->request($req);
     $res->is_success or die "Cannot send a report to @{[ $self->server_url ]}/api/v1/report/add:\n" . $res->as_string;
     my $dat = eval { decode_json($res->decoded_content) } || $res->decoded_content . " : $@";
-    $self->infof("report url: $dat->{report}->{url}");
+    $self->logger->infof("report url: $dat->{report}->{url}");
     my $report_url = $dat->{report}->{url} or die "Cannot get report url";
     return ($report_url, $dat->{report}->{last_status});
 }
 
 sub tee {
     my ($self, $command) = @_;
-    $self->infof("command: $command");
+    $self->logger->infof("command: $command");
     my ($out) = Capture::Tiny::tee_merged {
         ( $EUID, $EGID ) = ( $UID, $GID );
         my $begin_time = time;
@@ -294,45 +299,6 @@ sub tee {
     print {$self->logfh} $out;
     return $?;
 }
-
-sub infof {
-    my $self = shift;
-    my $STDERR = *STDERR;
-
-    local *STDERR = $self->logfh;
-    local $Log::Minimal::PRINT = $self->_warn_formatted;
-
-    $self->logger->infof(@_);
-
-    unless ($self->quiet) {
-        *STDERR = $STDERR;
-        $self->logger->infof(@_);
-    }
-}
-
-sub warnf {
-    my $self = shift;
-
-    my $STDERR = *STDERR;
-
-    local *STDERR = $self->logfh;
-    local $Log::Minimal::PRINT = $self->_warn_formatted;
-
-    $self->logger->warnf(@_);
-
-    unless ($self->quiet) {
-        *STDERR = $STDERR;
-        $self->logger->warnf(@_);
-    }
-}
-
-sub _warn_formatted {
-    return sub {
-        my ($time, $type, $message) = @_;
-        warn "$time [$type] $message\n";
-    };
-}
-
 
 1;
 __END__
@@ -448,11 +414,11 @@ This method runs C<< $command >> and tee the output of the STDOUT/STDERR to the 
 
 I<Return>: exit code by the C<< $command >>.
 
-=item $client->infof($message)
+=item $client->logger->infof($message)
 
 Print C<< $message >> as INFO and write to the C<logfh>.
 
-=item $client->warnf($message)
+=item $client->logger->warnf($message)
 
 Print C<< $message >> as WARN and write to the C<logfh>.
 

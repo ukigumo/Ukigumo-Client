@@ -20,7 +20,7 @@ sub get_revision {
 sub update {
     my ($self, $c) = @_;
 
-    $c->infof("workdir is " . Cwd::getcwd());
+    $c->logger->infof("workdir is " . Cwd::getcwd());
     unless (-d ".git") {
         $c->tee("git clone --branch $self->{branch} @{[ $self->repository ]} ./") == 0 or die "Cannot clone repository";
     }

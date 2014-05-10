@@ -100,7 +100,7 @@ sub apply_environment_variables {
     my $env = $self->env;
     if ($env && (my $ref = ref $env) ne 'ARRAY') {
         $ref ||= 'SCALAR';
-        $c->warnf("`env` must be array reference: in spite of it was given `$ref`");
+        $c->logger->warnf("`env` must be array reference: in spite of it was given `$ref`");
         $c->reflect_result(STATUS_FAIL);
         die "`env` must be array reference: in spite of it was given `$ref`\n";
     }
@@ -118,19 +118,19 @@ sub _build_config {
     if (-f $ukigumo_yml) {
         my $y = eval { YAML::Tiny->read($ukigumo_yml) };
         if (my $e = $@) {
-            $c->warnf("YAML syntax error in $ukigumo_yml: $e");
+            $c->logger->warnf("YAML syntax error in $ukigumo_yml: $e");
             $c->reflect_result(STATUS_FAIL);
             die "$ukigumo_yml: $e\n";
         }
         unless (defined $y->[0]) {
-            $c->warnf("$ukigumo_yml: does not contain anything");
+            $c->logger->warnf("$ukigumo_yml: does not contain anything");
             $c->reflect_result(STATUS_FAIL);
             die "$ukigumo_yml: does not contain anything\n";
         }
         return $y->[0];
     }
 
-    $c->infof("There is no $ukigumo_yml");
+    $c->logger->infof("There is no $ukigumo_yml");
     return +{};
 }
 
@@ -146,7 +146,7 @@ sub _build_notifiers {
             push @notifiers, @{$self->_load_notifier_class($type, NOTIFIER_GITHUBSTATUSES)};
         } else {
             my $c = $self->c;
-            $c->warnf("Unknown notification type: $type");
+            $c->logger->warnf("Unknown notification type: $type");
             $c->reflect_result(STATUS_FAIL);
             die "Unknown notification type: $type\n";
         }

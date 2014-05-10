@@ -19,7 +19,7 @@ sub run {
         $c->tee($^O eq 'MSWin32' ? "Build test" : "./Build test")==0 or return STATUS_FAIL;
         return STATUS_SUCCESS;
     } else {
-        $c->warnf("There is no Makefile.PL or Build.PL");
+        $c->logger->warnf("There is no Makefile.PL or Build.PL");
         return STATUS_NA;
     }
 }
