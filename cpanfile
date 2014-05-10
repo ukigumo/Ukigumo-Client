@@ -1,4 +1,5 @@
 requires 'perl', '5.008001';
+requires 'parent';
 requires 'LWP::UserAgent' => 6;
 requires 'JSON' => 2;
 requires 'Mouse' => 0;
@@ -23,6 +24,7 @@ on test => sub {
     requires 'Test::More', "0.98";
     requires 'Test::Requires';
     requires 'File::pushd';
+    requires 'Data::Section::Simple';
 };
 
 on configure => sub {
