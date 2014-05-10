@@ -297,10 +297,11 @@ sub tee {
 
 sub infof {
     my $self = shift;
-
     my $STDERR = *STDERR;
 
     local *STDERR = $self->logfh;
+    local $Log::Minimal::PRINT = $self->_warn_formatted;
+
     $self->logger->infof(@_);
 
     unless ($self->quiet) {
@@ -315,6 +316,8 @@ sub warnf {
     my $STDERR = *STDERR;
 
     local *STDERR = $self->logfh;
+    local $Log::Minimal::PRINT = $self->_warn_formatted;
+
     $self->logger->warnf(@_);
 
     unless ($self->quiet) {
@@ -322,6 +325,14 @@ sub warnf {
         $self->logger->warnf(@_);
     }
 }
+
+sub _warn_formatted {
+    return sub {
+        my ($time, $type, $message) = @_;
+        warn "$time [$type] $message\n";
+    };
+}
+
 
 1;
 __END__
