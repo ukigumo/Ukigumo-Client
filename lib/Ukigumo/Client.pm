@@ -24,6 +24,7 @@ use Scope::Guard;
 
 use Ukigumo::Constants;
 use Ukigumo::Client::Executor::Command;
+use Ukigumo::Client::YamlConfig;
 use Ukigumo::Logger;
 
 use Mouse;
@@ -190,16 +191,14 @@ sub run {
             return;
         }
 
-        my $conf = $self->load_config();
+        my $conf = Ukigumo::Client::YamlConfig->new(c => $self);
 
         local %ENV = %ENV;
-        $self->_set_env_var($conf);
+        $conf->apply_environment_variables;
 
-        if (my $project_name = $conf->{project_name}) {
-            $self->project($project_name);
-        }
+        $self->project($conf->project_name || $self->project);
 
-        $self->_load_notifications($conf);
+        $self->push_notifier(@{$conf->notifiers});
 
         my $repository_owner = $self->repository_owner;
         my $repository_name  = $self->repository_name;
@@ -214,7 +213,7 @@ sub run {
 
         $self->run_commands($conf, 'before_script');
 
-        my $executor = defined($conf->{script}) ? Ukigumo::Client::Executor::Command->new(command => $conf->{script}) : $self->executor;
+        my $executor = defined($conf->script) ? Ukigumo::Client::Executor::Command->new(command => $conf->script) : $self->executor;
 
         $self->infof('run executor : ' . ref $executor);
         my $status = $executor->run($self);
@@ -251,86 +250,13 @@ sub _reflect_result {
     }
 }
 
-sub _load_notifications {
-    my ($self, $conf) = @_;
-    for my $type (keys %{$conf->{notifications}}) {
-        if ($type eq 'ikachan') {
-            $self->_load_notify_modules($conf, $type, NOTIFIER_IKACHAN);
-        }
-        elsif ($type eq 'github_statuses') {
-            $self->_load_notify_modules($conf, $type, NOTIFIER_GITHUBSTATUSES);
-        } else {
-            $self->_reflect_result(STATUS_FAIL);
-            die "Unknown notification type: $type";
-        }
-    }
-}
-
-sub _load_notify_modules {
-    my ($self, $conf, $type, $module_name) = @_;
-
-    require $self->_convert_module_name_to_module_path($module_name);
-
-    my $c = $conf->{notifications}->{$type};
-       $c = [$c] unless ref $c eq 'ARRAY';
-
-    for my $args (@$c) {
-        my $notifier = $module_name->new($args);
-        push @{$self->{notifiers}}, $notifier;
-    }
-}
-
-sub _convert_module_name_to_module_path {
-    my ($self, $module_name) = @_;
-
-    $module_name =~ s!::!/!g;
-    return $module_name . '.pm';
-}
-
-sub _set_env_var {
-    my ($self, $conf) = @_;
-
-    my $env = $conf->{env};
-    if ($env && (my $ref = ref $env) ne 'ARRAY') {
-        $self->_reflect_result(STATUS_FAIL);
-        die "`env` must be array reference: in spite of it was given `$ref`";
-    }
-    for my $e (@$env) {
-        my ($k, $v) = %$e;
-        $ENV{$k} = $v;
-    }
-}
-
-sub load_config {
-    my $self = shift;
-
-    if ( -f '.ukigumo.yml' ) {
-        my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
-        if (my $e = $@) {
-            $self->warnf("YAML syntax error in .ukigumo.yml: $e");
-            $self->_reflect_result(STATUS_FAIL);
-            die ".ukigumo.yml: $e\n";
-        }
-        unless (defined $y) {
-            $self->warnf("ukigumo.yml does not contain anything");
-            $self->_reflect_result(STATUS_FAIL);
-            die ".ukigumo.yml: does not contain anything\n";
-        }
-        $y ? $y->[0] : undef;
-    }
-    else {
-        $self->infof("There is no .ukigumo.yml");
-        undef;
-    }
-}
-
 # Install deps
 sub install {
     my ($self, $conf) = @_;
 
     my $install = do {
-        if ($conf->{install}) {
-            $conf->{install};
+        if ($conf->install) {
+            $conf->install;
         } else {
             if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
                 'cpanm --notest --installdeps .';
@@ -354,7 +280,7 @@ sub install {
 
 sub run_commands {
     my ($self, $yml, $phase) = @_;
-    for my $cmd (@{$yml->{$phase} || []}) {
+    for my $cmd (@{$yml->$phase || []}) {
         $self->infof("[${phase}] $cmd");
         my $begin_time = time;
 
