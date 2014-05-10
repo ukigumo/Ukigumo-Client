@@ -98,9 +98,13 @@ Ukigumo::Client is client library for Ukigumo.
 
     _Return_: exit code by the `$command`.
 
-- $client->log($message)
+- $client->infof($message)
 
-    Print `$message` and write to the `logfh`.
+    Print `$message` as INFO and write to the `logfh`.
+
+- $client->warnf($message)
+
+    Print `$message` as WARN and write to the `logfh`.
 
 - $client->report\_timeout()
 

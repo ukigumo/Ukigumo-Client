@@ -24,6 +24,7 @@ use Scope::Guard;
 
 use Ukigumo::Constants;
 use Ukigumo::Client::Executor::Command;
+use Ukigumo::Logger;
 
 use Mouse;
 
@@ -134,6 +135,18 @@ has 'elapsed_time_sec' => (
     default => 0,
 );
 
+has 'logger' => (
+    is      => 'ro',
+    isa     => 'Ukigumo::Logger',
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        Ukigumo::Logger->new(prefix => ['[' . $self->branch . ']']);
+    },
+);
+
+no Mouse;
+
 sub normalize_path {
     my $path = shift;
     $path =~ s/[^a-zA-Z0-9-_]/_/g;
@@ -156,9 +169,9 @@ sub run {
 
     my $workdir = File::Spec->catdir( $self->workdir, normalize_path($self->project), normalize_path($self->branch) );
 
-    $self->log("ukigumo-client $VERSION");
-    $self->log("start testing : " . $self->vc->description());
-    $self->log("working directory : " . $workdir);
+    $self->infof("ukigumo-client $VERSION");
+    $self->infof("start testing : " . $self->vc->description());
+    $self->infof("working directory : " . $workdir);
 
     {
         mkpath($workdir);
@@ -167,13 +180,13 @@ sub run {
             die "Cannot chdir(@{[ $workdir ]}): $!";
         }
 
-        $self->log('run vc : ' . ref $self->vc);
+        $self->infof('run vc : ' . ref $self->vc);
         chomp(my $orig_revision = $self->vc->get_revision());
         $self->vc->update($self, $workdir);
         chomp(my $current_revision = $self->current_revision);
 
         if ($self->vc->skip_if_unmodified && $orig_revision eq $current_revision) {
-            $self->log('skip testing');
+            $self->infof('skip testing');
             return;
         }
 
@@ -203,17 +216,17 @@ sub run {
 
         my $executor = defined($conf->{script}) ? Ukigumo::Client::Executor::Command->new(command => $conf->{script}) : $self->executor;
 
-        $self->log('run executor : ' . ref $executor);
+        $self->infof('run executor : ' . ref $executor);
         my $status = $executor->run($self);
 
-        $self->log('finished testing : ' . $status);
+        $self->infof('finished testing : ' . $status);
 
         $self->run_commands($conf, 'after_script');
 
         $self->_reflect_result($status);
     }
 
-    $self->log("end testing");
+    $self->infof("end testing");
 }
 
 sub report_timeout {
@@ -228,7 +241,7 @@ sub _reflect_result {
 
     my ($report_url, $last_status) = $self->send_to_server($status, $log_filename);
 
-    $self->log("sending notification: @{[ $self->branch ]}, $status");
+    $self->infof("sending notification: @{[ $self->branch ]}, $status");
 
     my $repository_owner = $self->repository_owner;
     my $repository_name  = $self->repository_name;
@@ -294,19 +307,19 @@ sub load_config {
     if ( -f '.ukigumo.yml' ) {
         my $y = eval { YAML::Tiny->read('.ukigumo.yml') };
         if (my $e = $@) {
-            $self->log("YAML syntax error in .ukigumo.yml: $e");
+            $self->warnf("YAML syntax error in .ukigumo.yml: $e");
             $self->_reflect_result(STATUS_FAIL);
             die ".ukigumo.yml: $e\n";
         }
         unless (defined $y) {
-            $self->log("ukigumo.yml does not contain anything");
+            $self->warnf("ukigumo.yml does not contain anything");
             $self->_reflect_result(STATUS_FAIL);
             die ".ukigumo.yml: does not contain anything\n";
         }
         $y ? $y->[0] : undef;
     }
     else {
-        $self->log("There is no .ukigumo.yml");
+        $self->infof("There is no .ukigumo.yml");
         undef;
     }
 }
@@ -327,7 +340,7 @@ sub install {
         }
     };
     if ($install) {
-        $self->log("[install] $install");
+        $self->infof("[install] $install");
         my $begin_time = time;
 
         unless (system($install) == 0) {
@@ -342,7 +355,7 @@ sub install {
 sub run_commands {
     my ($self, $yml, $phase) = @_;
     for my $cmd (@{$yml->{$phase} || []}) {
-        $self->log("[${phase}] $cmd");
+        $self->infof("[${phase}] $cmd");
         my $begin_time = time;
 
         unless (system($cmd) == 0) {
@@ -381,14 +394,14 @@ sub send_to_server {
     my $res = $ua->request($req);
     $res->is_success or die "Cannot send a report to @{[ $self->server_url ]}/api/v1/report/add:\n" . $res->as_string;
     my $dat = eval { decode_json($res->decoded_content) } || $res->decoded_content . " : $@";
-    $self->log("report url: $dat->{report}->{url}");
+    $self->infof("report url: $dat->{report}->{url}");
     my $report_url = $dat->{report}->{url} or die "Cannot get report url";
     return ($report_url, $dat->{report}->{last_status});
 }
 
 sub tee {
     my ($self, $command) = @_;
-    $self->log("command: $command");
+    $self->infof("command: $command");
     my ($out) = Capture::Tiny::tee_merged {
         ( $EUID, $EGID ) = ( $UID, $GID );
         my $begin_time = time;
@@ -401,16 +414,19 @@ sub tee {
     return $?;
 }
 
-sub log {
+sub infof {
     my $self = shift;
-    my $msg = join( ' ',
-        Time::Piece->new()->strftime('[%Y-%m-%d %H:%M]'),
-        '[' . $self->branch . ']', @_ )
-      . "\n";
+    my $msg = $self->logger->infof(@_);
     print STDOUT $msg unless $self->quiet;
     print {$self->logfh} $msg;
 }
 
+sub warnf {
+    my $self = shift;
+    my $msg = $self->logger->warnf(@_);
+    print STDOUT $msg unless $self->quiet;
+    print {$self->logfh} $msg;
+}
 
 1;
 __END__
@@ -522,9 +538,13 @@ This method runs C<< $command >> and tee the output of the STDOUT/STDERR to the 
 
 I<Return>: exit code by the C<< $command >>.
 
-=item $client->log($message)
+=item $client->infof($message)
 
-Print C<< $message >> and write to the C<logfh>.
+Print C<< $message >> as INFO and write to the C<logfh>.
+
+=item $client->warnf($message)
+
+Print C<< $message >> as WARN and write to the C<logfh>.
 
 =item $client->report_timeout()
 

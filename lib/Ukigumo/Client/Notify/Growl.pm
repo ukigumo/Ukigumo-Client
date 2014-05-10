@@ -42,12 +42,12 @@ sub send {
          defined($last_status)     &&
          ($last_status eq STATUS_SUCCESS || $last_status eq STATUS_SKIP)
     ) {
-        $c->log(
+        $c->infof(
             "The test was succeeded. There is no reason to notify($status, $last_status).");
         return;
     }
     if ( $self->ignore_skip && $status eq STATUS_SKIP ) {
-        $c->log( "The test was skiped. There is no reason to notify.");
+        $c->infof( "The test was skiped. There is no reason to notify.");
         return;
     }
 

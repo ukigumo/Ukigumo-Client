@@ -20,7 +20,7 @@ sub get_revision {
 sub update {
     my ($self, $c) = @_;
 
-    $c->log("workdir is ".Cwd::getcwd());
+    $c->infof("workdir is ".Cwd::getcwd());
     unless (-d ".svn") {
         $c->tee("svn co @{[ $self->repository ]} ./") == 0 or die "Cannot checkout repository";
     }

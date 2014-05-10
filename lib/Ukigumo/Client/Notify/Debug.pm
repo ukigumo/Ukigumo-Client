@@ -8,7 +8,7 @@ use Ukigumo::Helper qw(status_str);
 
 sub send {
     my ($self, $c, $status, $last_status, $report_url) = @_;
-    $c->log("STATUS IS '@{[ status_str $status ]}' '$report_url'");
+    $c->infof("STATUS IS '@{[ status_str $status ]}' '$report_url'");
 }
 
 1;
