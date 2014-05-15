@@ -61,14 +61,15 @@
             "Pod::Usage" : "0",
             "Scope::Guard" : "0",
             "String::IRC" : "0",
-            "Time::Piece" : "1.15",
             "Ukigumo::Common" : "0.09",
             "YAML::Tiny" : "0",
+            "parent" : "0",
             "perl" : "5.008001"
          }
       },
       "test" : {
          "requires" : {
+            "Data::Section::Simple" : "0",
             "File::pushd" : "0",
             "Test::More" : "0.98",
             "Test::Requires" : "0"
