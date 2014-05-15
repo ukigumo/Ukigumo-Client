@@ -44,33 +44,32 @@ no Mouse;
 
 sub infof {
     my $self = shift;
-
-    my $STDERR = *STDERR;
-
-    local *STDERR = $self->logfh;
-    local $Log::Minimal::PRINT = $self->_format;
-
-    $self->_logger->infof(@_);
-
-    unless ($self->quiet) {
-        *STDERR = $STDERR;
-        $self->_logger->infof(@_);
-    }
+    $self->_output_log_by('infof', @_);
 }
 
 sub warnf {
     my $self = shift;
+    $self->_output_log_by('warnf', @_);
+}
+
+sub _output_log_by {
+    my $self   = shift;
+    my $method = shift;
 
     my $STDERR = *STDERR;
 
-    local *STDERR = $self->logfh;
-    local $Log::Minimal::PRINT = $self->_format;
+    open my $fh, '>', \my $log;
+    local *STDERR = $fh;
 
-    $self->_logger->warnf(@_);
+    local $Log::Minimal::PRINT = $self->_format;
+    $self->_logger->$method(@_);
+
+    my $logfh = $self->logfh;
+    print $logfh $log;
 
     unless ($self->quiet) {
-        *STDERR = $STDERR;
-        $self->_logger->warnf(@_);
+        local *STDERR = $STDERR;
+        warn $log;
     }
 }
 
