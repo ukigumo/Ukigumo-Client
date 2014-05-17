@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use YAML::Tiny;
 use Ukigumo::Constants;
+use String::CamelCase qw/camelize/;
 
 use Mouse;
 
@@ -145,10 +146,7 @@ sub _build_notifiers {
         elsif ($type eq 'github_statuses') {
             push @notifiers, @{$self->_load_notifier_class($type, NOTIFIER_GITHUBSTATUSES)};
         } else {
-            my $c = $self->c;
-            $c->logger->warnf("Unknown notification type: $type");
-            $c->reflect_result(STATUS_FAIL);
-            die "Unknown notification type: $type\n";
+            push @notifiers, @{$self->_load_notifier_class($type)};
         }
     }
     return \@notifiers;
@@ -156,6 +154,10 @@ sub _build_notifiers {
 
 sub _load_notifier_class {
     my ($self, $type, $module_name) = @_;
+
+    unless ($module_name) {
+        $module_name = 'Ukigumo::Client::Notify::' . camelize($type);
+    }
 
     (my $module_path = $module_name) =~ s!::!/!g;
     $module_path .= '.pm';

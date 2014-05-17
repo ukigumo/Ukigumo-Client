@@ -16,6 +16,7 @@ requires 'Scope::Guard';
 requires 'Pod::Usage';
 requires 'Getopt::Long' => '2.42';
 requires 'File::Path';
+requires 'String::CamelCase';
 
 recommends 'Growl::Any';
 
