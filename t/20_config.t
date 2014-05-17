@@ -65,13 +65,6 @@ subtest 'load nil yml' => sub {
     like $@, qr/$tmpfile: does not contain anything/;
 };
 
-subtest 'die because given unknown notification type' => sub {
-    my $config = generate_config_by_yml($client, 'unknown_notification.yml');
-
-    eval { $config->notifiers };
-    like $@, qr/Unknown notification type: unknown/;
-};
-
 subtest 'load nil yml' => sub {
     my $config = Ukigumo::Client::YamlConfig->new(
         c => $client,
