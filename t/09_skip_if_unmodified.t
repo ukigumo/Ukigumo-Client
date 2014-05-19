@@ -27,31 +27,35 @@ LWP::Protocol::PSGI->register(sub{
     ]];
 });
 
-my $tmpdir = File::Temp::tempdir(CLEANUP => 1);
+my $tmpdir    = File::Temp::tempdir(CLEANUP => 1);
+my $revisions = [qw/aaa bbb bbb bbb/];
 
-my @revisions = qw/aaa bbb bbb bbb/;
-my $client = Ukigumo::Client->new(
-    vc => Ukigumo::Client::VC::Callback->new(
-        update_cb          => sub { },
-        branch             => 'master',
-        repository         => 'git:...',
-        skip_if_unmodified => 1,
-        revision_cb => sub { shift @revisions },
-    ),
-    server_url => 'http://localhost/',
-    executor   => Ukigumo::Client::Executor::Callback->new(
-        run_cb => sub {
-            return STATUS_NA;
-        }
-    ),
-    workdir => $tmpdir,
-    quiet => 1,
-);
-
-$client->run();
+dispense_client($revisions)->run();
 is $test_count, 1;
 
-$client->run();
+dispense_client($revisions)->run();
 is $test_count, 1;
 
 done_testing;
+
+sub dispense_client {
+    my $revisions = shift;
+
+    Ukigumo::Client->new(
+        vc => Ukigumo::Client::VC::Callback->new(
+            update_cb          => sub { },
+            branch             => 'master',
+            repository         => 'git:...',
+            skip_if_unmodified => 1,
+            revision_cb => sub { shift @$revisions },
+        ),
+        server_url => 'http://localhost/',
+        executor   => Ukigumo::Client::Executor::Callback->new(
+            run_cb => sub {
+                return STATUS_NA;
+            }
+        ),
+        workdir => $tmpdir,
+        quiet => 1,
+    );
+}
