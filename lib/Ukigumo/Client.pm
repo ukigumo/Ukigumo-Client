@@ -108,19 +108,29 @@ has 'repository_name' => (
     default => '',
 );
 
-has 'vc_log' => (
-    is      => 'rw',
+# for VC log
+has vc_log => (
+    is      => 'ro',
     isa     => 'Str',
     lazy    => 1,
     default => sub {
         my $self = shift;
-        chomp(my $orig_revision    = $self->vc->get_revision());
-        chomp(my $current_revision = $self->current_revision());
+        chomp(my $orig_revision    = $self->orig_revision);
+        chomp(my $current_revision = $self->current_revision);
         join '', $self->vc->get_log($orig_revision, $current_revision);
     },
 );
-has 'current_revision' => (
-    is      => 'rw',
+has current_revision => (
+    is      => 'ro',
+    isa     => 'Str',
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        $self->vc->get_revision();
+    },
+);
+has orig_revision => (
+    is      => 'ro',
     isa     => 'Str',
     lazy    => 1,
     default => sub {
@@ -185,7 +195,8 @@ sub run {
         }
 
         $self->logger->infof('run vc : ' . ref $self->vc);
-        chomp(my $orig_revision = $self->vc->get_revision());
+        chomp(my $orig_revision = $self->orig_revision);
+
         $self->vc->update($self, $workdir);
         chomp(my $current_revision = $self->current_revision);
 
