@@ -4,7 +4,7 @@
 
 =head1 NAME
 
-.ukigumo.yml - Configuration file by YAML
+ukigumo.yml - Configuration file by YAML
 
 =head1 SYNOPSIS
 
@@ -52,15 +52,15 @@ Now available notifiers names are followings;
 
 =over 8
 
-=item callback (L<Ukigumo::Client::Notify::Callback>)
+=item * callback (L<Ukigumo::Client::Notify::Callback>)
 
-=item debug (L<Ukigumo::Client::Notify::Debug>)
+=item * debug (L<Ukigumo::Client::Notify::Debug>)
 
-=item github_statuses (L<Ukigumo::Client::Notify::GitHubStatuses>)
+=item * github_statuses (L<Ukigumo::Client::Notify::GitHubStatuses>)
 
-=item growl (L<Ukigumo::Client::Notify::Growl>)
+=item * growl (L<Ukigumo::Client::Notify::Growl>)
 
-=item ikachan (L<Ukigumo::Client::Notify::Ikachan>)
+=item * ikachan (L<Ukigumo::Client::Notify::Ikachan>)
 
 =back
 
@@ -88,7 +88,6 @@ Commands that runs on before main script phase , and after install phase (defaul
 =item * C<script>
 
 Main command (default: command that is passed by L<ukigumo-client.pl> or C<Ukigumo::Client::Executor::Perl>).
-has script => (
 
     script
       - rake spec
@@ -102,4 +101,11 @@ Commands that runs on after main script phase (default: do nothing).
 
 =back
 
+=head1 NOTES
+
+=head2 Execution sequence of commands
+
+C<before_install> -> C<install> -> C<before_script> -> C<script> -> C<after_script>
+
 =cut
+

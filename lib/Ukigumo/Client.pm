@@ -445,7 +445,7 @@ This method always sends FAIL report to server and notifies to each notifiers.
 
 If C<.ukigumo.yml> file is on the project root, L<Ukigumo::Client> loads that file and applies the settings that are written in it.
 
-Please see also L<Ukigumo::Client::ukigumo_yml>.
+Please see also L<ukigumo.yml.pod>.
 
 =head1 AUTHOR
 
