@@ -114,6 +114,12 @@ Ukigumo::Client is client library for Ukigumo.
 
     This method always sends FAIL report to server and notifies to each notifiers.
 
+# CONFIGURATION
+
+If `.ukigumo.yml` file is on the project root, [Ukigumo::Client](https://metacpan.org/pod/Ukigumo::Client) loads that file and applies the settings that are written in it.
+
+Please see also [Ukigumo::Client::ukigumo\_yml](https://metacpan.org/pod/Ukigumo::Client::ukigumo_yml).
+
 # AUTHOR
 
 Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>

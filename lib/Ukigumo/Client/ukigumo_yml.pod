@@ -1,6 +1,6 @@
 =encoding utf8
 
-=for stopwords ukigumo YAML CamelCase
+=for stopwords ukigumo YAML CamelCase ikachan
 
 =head1 NAME
 
