@@ -34,7 +34,6 @@ has notifiers => (
     builder => '_build_notifiers',
 );
 
-
 # Configurable by yml
 has env => (
     is      => 'ro',

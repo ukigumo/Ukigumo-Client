@@ -441,6 +441,12 @@ This method always sends FAIL report to server and notifies to each notifiers.
 
 =back
 
+=head1 CONFIGURATION
+
+If C<.ukigumo.yml> file is on the project root, L<Ukigumo::Client> loads that file and applies the settings that are written in it.
+
+Please see also L<Ukigumo::Client::ukigumo_yml>.
+
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
