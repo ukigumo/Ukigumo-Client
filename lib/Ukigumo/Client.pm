@@ -2,7 +2,7 @@ package Ukigumo::Client;
 use strict;
 use warnings;
 use 5.008001;
-our $VERSION = '0.31';
+our $VERSION = '0.32';
 
 use Carp ();
 use Capture::Tiny;
@@ -315,6 +315,8 @@ sub tee {
 __END__
 
 =encoding utf8
+
+=for stopwords infof warnf
 
 =head1 NAME
 

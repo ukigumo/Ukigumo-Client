@@ -2,6 +2,14 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.32 2014-06-04T06:48:13Z
+
+    - Supports Env
+    - Change to be configurable the project name
+    - Allow to register user declared notifiers
+    - Fix bug about vc-log of git
+    - Rename script directory due to Module::Build::Tiny install only script/* (thank you @kga)
+
 0.31 2014-05-01T04:21:43Z
 
     - Fix the problem that doesn't show git log when both of revisions are equal
