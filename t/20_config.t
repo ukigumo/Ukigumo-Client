@@ -3,6 +3,7 @@ use warnings;
 use t::Util qw/dispense_client/;
 use Data::Section::Simple qw/get_data_section/;
 use File::Temp qw/tempfile/;
+use File::Spec::Functions qw/catfile/;
 use Ukigumo::Client::YamlConfig;
 use Test::More;
 
@@ -25,9 +26,12 @@ undef *Ukigumo::Client::reflect_result;
 my $client = dispense_client();
 
 subtest 'load `.ukigumo.yml` on project root ok' => sub {
-    my $config = Ukigumo::Client::YamlConfig->new(c => $client);
+    my $config = Ukigumo::Client::YamlConfig->new(
+        c => $client,
+        ukigumo_yml_file => catfile('eg', '_ukigumo.yml'),
+    );
 
-    is $config->ukigumo_yml_file, '.ukigumo.yml';
+    is $config->ukigumo_yml_file, 'eg/_ukigumo.yml';
 
     is scalar @{$config->before_install}, 1;
     is $config->before_install->[0], 'cpanm -L $HOME/.ukigumo/ukigumo-client/extlib --installdeps -n .';
