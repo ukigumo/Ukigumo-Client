@@ -118,7 +118,7 @@ Ukigumo::Client is client library for Ukigumo.
 
 If `.ukigumo.yml` file is on the project root, [Ukigumo::Client](https://metacpan.org/pod/Ukigumo::Client) loads that file and applies the settings that are written in it.
 
-Please see also [Ukigumo::Client::ukigumo\_yml](https://metacpan.org/pod/Ukigumo::Client::ukigumo_yml).
+Please see also [ukigumo.yml.pod](https://metacpan.org/pod/ukigumo.yml.pod).
 
 # AUTHOR
 

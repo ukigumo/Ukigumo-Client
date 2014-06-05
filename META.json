@@ -89,7 +89,7 @@
          "web" : "https://github.com/ukigumo/Ukigumo-Client"
       }
    },
-   "version" : "0.33",
+   "version" : "0.34",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "xaicron <xaicron@gmail.com>",

@@ -2,6 +2,10 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.34 2014-06-05T01:45:53Z
+
+    - Fix typo in documentation for .ukigumo.yml
+
 0.33 2014-06-04T09:19:56Z
 
     - Add documentations for .ukigumo.yml
