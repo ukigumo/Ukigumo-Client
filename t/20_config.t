@@ -36,8 +36,8 @@ subtest 'load `.ukigumo.yml` on project root ok' => sub {
     is scalar @{$config->before_install}, 1;
     is $config->before_install->[0], 'cpanm -L $HOME/.ukigumo/ukigumo-client/extlib --installdeps -n .';
 
-    is $config->install, 'ln -s $HOME/.ukigumo/ukigumo-client/extlib ./extlib';
-    is $config->script, 'prove -lrv -Iextlib/lib/perl5 t';
+    is_deeply $config->install, ['ln -s $HOME/.ukigumo/ukigumo-client/extlib ./extlib'];
+    is_deeply $config->script, ['prove -lrv -Iextlib/lib/perl5 t'];
 };
 
 subtest 'load basic yml' => sub {
@@ -50,9 +50,9 @@ subtest 'load basic yml' => sub {
 
     is $config->project_name, 'MyProj';
     is_deeply $config->before_install, ['foo'];
-    is $config->install, 'bar';
+    is_deeply $config->install, ['bar'];
     is_deeply $config->before_script, ['buz'];
-    is $config->script, 'hoge';
+    is_deeply $config->script, ['hoge'];
     is_deeply $config->after_script, ['fuga'];
 };
 
@@ -91,7 +91,8 @@ before_install:
 install: bar
 before_script:
   - buz
-script: hoge
+script:
+  - hoge
 after_script:
   - fuga
 notifications:
@@ -107,4 +108,3 @@ notifications:
 notifications:
   unknown:
     - foo: bar
-
