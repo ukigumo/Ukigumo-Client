@@ -20,6 +20,12 @@ has ukigumo_yml_file => (
     default  => '.ukigumo.yml',
 );
 
+has travis_yml_file => (
+    is       => 'ro',
+    isa      => 'Str',
+    default  => '.travis.yml',
+);
+
 # Generates automatically
 has config => (
     is      => 'ro',
@@ -60,35 +66,35 @@ has before_install => (
     is      => 'ro',
     isa     => 'Maybe[ArrayRef[Str]]',
     lazy    => 1,
-    default => sub { shift->config->{before_install} },
+    default => sub { shift->_array_of_str_from_config('before_install') },
 );
 
 has install => (
     is      => 'ro',
-    isa     => 'Maybe[Str]',
+    isa     => 'Maybe[ArrayRef[Str]]',
     lazy    => 1,
-    default => sub { shift->config->{install} },
+    default => sub { shift->_array_of_str_from_config('install') },
 );
 
 has before_script => (
     is      => 'ro',
     isa     => 'Maybe[ArrayRef[Str]]',
     lazy    => 1,
-    default => sub { shift->config->{before_script} },
+    default => sub { shift->_array_of_str_from_config('before_script') },
 );
 
 has script => (
     is      => 'ro',
-    isa     => 'Maybe[Str]',
+    isa     => 'Maybe[ArrayRef[Str]]',
     lazy    => 1,
-    default => sub { shift->config->{script} },
+    default => sub { shift->_array_of_str_from_config('script') },
 );
 
 has after_script => (
     is      => 'ro',
     isa     => 'Maybe[ArrayRef[Str]]',
     lazy    => 1,
-    default => sub { shift->config->{after_script} },
+    default => sub { shift->_array_of_str_from_config('after_script') },
 );
 
 no Mouse;
@@ -110,12 +116,23 @@ sub apply_environment_variables {
     }
 }
 
+sub effective_yml_file {
+    my ($self) = @_;
+
+    my @files = ($self->ukigumo_yml_file, $self->travis_yml_file);
+    for my $file (@files) {
+        return $file if -f $file;
+    }
+
+    return;
+}
+
 sub _build_config {
     my ($self) = @_;
     my $c = $self->c;
 
-    my $ukigumo_yml = $self->ukigumo_yml_file;
-    if (-f $ukigumo_yml) {
+    my $ukigumo_yml = $self->effective_yml_file;
+    if ($ukigumo_yml) {
         my $y = eval { YAML::Tiny->read($ukigumo_yml) };
         if (my $e = $@) {
             $c->logger->warnf("YAML syntax error in $ukigumo_yml: $e");
@@ -130,8 +147,15 @@ sub _build_config {
         return $y->[0];
     }
 
-    $c->logger->infof("There is no $ukigumo_yml");
+    $c->logger->infof("There is no yaml file");
     return +{};
+}
+
+sub _array_of_str_from_config {
+    my ($self, $key) = @_;
+
+    my $str = $self->config->{$key};
+    (defined $str && not ref $str) ? [$str] : $str;
 }
 
 sub _build_notifiers {
@@ -174,4 +198,3 @@ sub _load_notifier_class {
 }
 
 1;
-

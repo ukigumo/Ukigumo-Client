@@ -48,8 +48,8 @@ sub run {
 sub _decide_install_cmd {
     my ($self) = @_;
 
-    if ($self->config->install) {
-        return [$self->config->install];
+    if (my $install = $self->config->install) {
+        return ref $install ? $install : [$install];
     }
 
     if (-f 'Makefile.PL' || -f 'cpanfile' || -f 'Build.PL') {
@@ -60,4 +60,3 @@ sub _decide_install_cmd {
 }
 
 1;
-
