@@ -64,6 +64,7 @@ subtest 'load nil yml' => sub {
         my $config = Ukigumo::Client::YamlConfig->new(
             c => $client,
             ukigumo_yml_file => $tmpfile,
+            travis_yml_file => $tmpfile,
         );
     };
     like $@, qr/$tmpfile: does not contain anything/;
@@ -73,6 +74,7 @@ subtest 'load nil yml' => sub {
     my $config = Ukigumo::Client::YamlConfig->new(
         c => $client,
         ukigumo_yml_file => 'NOT_EXISTS',
+        travis_yml_file => 'NOT_EXISTS',
     );
     is_deeply $config->config, {}
 };

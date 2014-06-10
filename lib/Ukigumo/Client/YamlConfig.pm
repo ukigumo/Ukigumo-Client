@@ -20,6 +20,12 @@ has ukigumo_yml_file => (
     default  => '.ukigumo.yml',
 );
 
+has travis_yml_file => (
+    is       => 'ro',
+    isa      => 'Str',
+    default  => '.travis.yml',
+);
+
 # Generates automatically
 has config => (
     is      => 'ro',
@@ -110,12 +116,23 @@ sub apply_environment_variables {
     }
 }
 
+sub effective_yml_file {
+    my ($self) = @_;
+
+    my @files = ($self->ukigumo_yml_file, $self->travis_yml_file);
+    for my $file (@files) {
+        return $file if -f $file;
+    }
+
+    return;
+}
+
 sub _build_config {
     my ($self) = @_;
     my $c = $self->c;
 
-    my $ukigumo_yml = $self->ukigumo_yml_file;
-    if (-f $ukigumo_yml) {
+    my $ukigumo_yml = $self->effective_yml_file;
+    if ($ukigumo_yml) {
         my $y = eval { YAML::Tiny->read($ukigumo_yml) };
         if (my $e = $@) {
             $c->logger->warnf("YAML syntax error in $ukigumo_yml: $e");
@@ -130,7 +147,7 @@ sub _build_config {
         return $y->[0];
     }
 
-    $c->logger->infof("There is no $ukigumo_yml");
+    $c->logger->infof("There is no yaml file");
     return +{};
 }
 
