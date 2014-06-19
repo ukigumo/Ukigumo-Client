@@ -54,6 +54,7 @@ subtest 'load basic yml' => sub {
     is_deeply $config->before_script, ['buz'];
     is_deeply $config->script, ['hoge'];
     is_deeply $config->after_script, ['fuga'];
+    is_deeply $config->branches_only, ['master', 'release'];
 };
 
 subtest 'load nil yml' => sub {
@@ -79,6 +80,23 @@ subtest 'load nil yml' => sub {
     is_deeply $config->config, {}
 };
 
+subtest 'should get undef when `branches` or `only` is nil' => sub {
+    subtest 'empty branches_only' => sub {
+        my $config = generate_config_by_yml($client, 'empty_branches_only.yml');
+        is $config->branches_only, undef;
+    };
+
+    subtest 'not exists only' => sub {
+        my $config = generate_config_by_yml($client, 'not_exists_only.yml');
+        is $config->branches_only, undef;
+    };
+
+    subtest 'not exists branches' => sub {
+        my $config = generate_config_by_yml($client, 'not_exists_branches.yml');
+        is $config->branches_only, undef;
+    };
+};
+
 done_testing;
 
 __DATA__
@@ -102,9 +120,20 @@ notifications:
   github_statuses:
     - api_endpoint: localhost
       access_token: __ACCESS_TOKEN__
+branches:
+  only:
+    - master
+    - release
 
-@@ unknown_notification.yml
+@@ empty_branches_only.yml
+project_name: MyProj
+branches:
+  only:
 
-notifications:
-  unknown:
-    - foo: bar
+@@ not_exists_only.yml
+project_name: MyProj
+branches:
+
+@@ not_exists_branches.yml
+project_name: MyProj
+

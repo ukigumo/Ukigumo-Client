@@ -61,6 +61,18 @@ has notifications => (
     default => sub { shift->config->{notifications} || {} },
 );
 
+has branches_only => (
+    is      => 'ro',
+    isa     => 'Maybe[ArrayRef]',
+    lazy    => 1,
+    default => sub {
+        if (my $branches = shift->config->{branches}) {
+            return $branches->{only} || undef;
+        }
+        return;
+    }
+);
+
 ## Executable commands
 has before_install => (
     is      => 'ro',
@@ -198,3 +210,4 @@ sub _load_notifier_class {
 }
 
 1;
+
