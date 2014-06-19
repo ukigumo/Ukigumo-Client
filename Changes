@@ -2,6 +2,11 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.35 2014-06-19T08:06:47Z
+
+    - Accept `.travis.yml` and support generally interface (@ikasam_a++)
+    - Support multiple commands at `install` and `script` (@ikasam_a++)
+
 0.34 2014-06-05T01:45:53Z
 
     - Fix typo in documentation for .ukigumo.yml

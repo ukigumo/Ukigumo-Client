@@ -62,7 +62,7 @@
             "Scope::Guard" : "0",
             "String::CamelCase" : "0",
             "String::IRC" : "0",
-            "Ukigumo::Common" : "0.09",
+            "Ukigumo::Common" : "0.1",
             "YAML::Tiny" : "0",
             "parent" : "0",
             "perl" : "5.008001"
@@ -80,16 +80,15 @@
    "release_status" : "unstable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/ukigumo/Ukigumo-Client/issues"
+         "web" : "ssh://git@github.com/ukigumo/Ukigumo-Client/issues"
       },
-      "homepage" : "https://github.com/ukigumo/Ukigumo-Client",
+      "homepage" : "ssh://git@github.com/ukigumo/Ukigumo-Client",
       "repository" : {
-         "type" : "git",
-         "url" : "git://github.com/ukigumo/Ukigumo-Client.git",
-         "web" : "https://github.com/ukigumo/Ukigumo-Client"
+         "url" : "ssh://git@github.com/ukigumo/Ukigumo-Client",
+         "web" : "ssh://git@github.com/ukigumo/Ukigumo-Client"
       }
    },
-   "version" : "0.34",
+   "version" : "0.35",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "xaicron <xaicron@gmail.com>",
@@ -98,6 +97,7 @@
       "mattn <mattn.jp@gmail.com>",
       "Tokuhiro Matsuno <tokuhirom@gmail.com>",
       "Wataru TOYA <watrty@gmail.com>",
+      "ikasam_a <masaki.nakagawa@gmail.com>",
       "moznion <moznion@gmail.com>"
    ]
 }
