@@ -142,7 +142,7 @@ has orig_revision => (
 
 has 'elapsed_time_sec' => (
     is      => 'rw',
-    isa     => 'Int',
+    isa     => 'Maybe[Int]',
     default => 0,
 );
 
