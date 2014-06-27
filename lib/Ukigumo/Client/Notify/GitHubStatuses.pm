@@ -100,7 +100,7 @@ URL of the GitHub API endpoint.
 
 =item access_token
 
-Access token of GitHub OAuth. It must granted C<repo:status>.
+Access token of GitHub OAuth. It must be granted C<repo:status>.
 
 =back
 

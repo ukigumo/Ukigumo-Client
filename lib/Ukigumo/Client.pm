@@ -371,7 +371,7 @@ URL of the Ukigumo server. It's required.
 
 =item C<user_agent>
 
-instance of L<LWP::UserAgent>. It's have a default value.
+instance of L<LWP::UserAgent>. It has a default value.
 
 =item C<vc>
 
@@ -413,7 +413,7 @@ Run a test context.
 
 =item $client->send_to_server($status: Int)
 
-Send a notification to the sever.
+Send a notification to the server.
 
 =item reflect_result($status: Int)
 
