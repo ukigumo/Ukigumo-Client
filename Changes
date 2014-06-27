@@ -2,6 +2,10 @@ Revision history for Perl module Ukigumo::Client
 
 {{$NEXT}}
 
+0.36 2014-06-27T03:51:54Z
+
+    - Bug fix
+
 0.35 2014-06-19T08:06:47Z
 
     - Accept `.travis.yml` and support generally interface (@ikasam_a++)
