@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.org/ukigumo/Ukigumo-Client.png?branch=master)](https://travis-ci.org/ukigumo/Ukigumo-Client)
 # NAME
 
 Ukigumo::Client - Client library for Ukigumo
