@@ -262,13 +262,16 @@ sub reflect_result {
 sub send_to_server {
     my ($self, $status, $log_filename) = @_;
 
+    my $server_url = $self->server_url;
+       $server_url =~ s!/$!!g;
+
+    $self->logger->infof("sending result to server at $server_url (status: $status)");
+
     my $ua = $self->user_agent();
 
     # flush log file before send it
     $self->logfh->flush();
 
-    my $server_url = $self->server_url;
-       $server_url =~ s!/$!!g;
     my $req =
         POST $server_url . '/api/v1/report/add',
         Content_Type => 'form-data',
