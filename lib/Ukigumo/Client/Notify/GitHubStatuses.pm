@@ -57,11 +57,11 @@ sub _determine_status_and_description {
 
     if ($status eq STATUS_SUCCESS) {
         $state       = 'success';
-        $description = 'The Ukigumo builds passed';
+        $description = 'Build by Ukigumo was successful';
     }
     elsif ($status eq STATUS_FAIL || $status eq STATUS_TIMEOUT) {
         $state = 'failure';
-        $description = 'The Ukigumo builds failed';
+        $description = 'Build by Ukigumo was failed';
     }
     elsif ($status eq STATUS_NA || $status eq STATUS_SKIP) {
         # Nothing to do
@@ -69,11 +69,11 @@ sub _determine_status_and_description {
     }
     elsif ($status eq STATUS_PENDING) {
         $state       = 'pending';
-        $description = 'The Ukigumo is running!';
+        $description = 'Ukigumo is running!';
     }
     else {
         $state       = 'error';
-        $description = 'The Ukigumo builds with errores';
+        $description = 'Build by Ukigumo has some errors';
     }
 
     return ($state, $description);
