@@ -57,17 +57,14 @@ sub send {
         return;
     }
 
-    my $url = $self->url;
-    $url =~ s!/$!!;    # remove trailing slash
-
     my $form = $self->__render($context, $self->form);
     my $headers = $self->__render($context, $self->headers);
 
     my $ua = $c->user_agent();
     my $res = $ua->post(
-        "$url/$self->{method}",
+        $self->url,
         $form,
-        $headers
+        %$headers,
     );
 
     if ( $res->is_success ) {
@@ -93,8 +90,8 @@ sub __render {
     my $re = '(?:' . join('|', keys %keywords) . ')';
     for my $k (keys %$h) {
         my $v = $h->{$k};
-        $k =~ s<\{\{ ($re) \}\}>< $keywords{$1} >exg;
-        $v =~ s<\{\{ ($re) \}\}>< $keywords{$1} >exg;
+        $k =~ s/\{\{ ($re) \}\}/ $keywords{$1}->() /exg;
+        $v =~ s/\{\{ ($re) \}\}/ $keywords{$1}->() /exg;
         $h2{$k} = $v;
     }
     return \%h2;
