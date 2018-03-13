@@ -80,8 +80,8 @@ sub __render {
     my %keywords = (
         project          => sub { $context->[0]->project },
         branch           => sub { $context->[0]->branch },
-        status           => sub { $context->[1] },
-        last_status      => sub { $context->[2] },
+        status           => sub { status_str($context->[1]) },
+        last_status      => sub { status_str($context->[2]) },
         report_url       => sub { $context->[3] },
         current_revision => sub { $context->[4] },
     );
